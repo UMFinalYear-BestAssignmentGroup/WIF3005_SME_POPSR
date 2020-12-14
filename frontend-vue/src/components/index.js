@@ -7,11 +7,11 @@ import StatsCard from "./Cards/StatsCard.vue";
 import NavTabsTable from "./Tables/NavTabsTable.vue";
 import OrderedTable from "./Tables/OrderedTable.vue";
 import SimpleTable from "./Tables/SimpleTable.vue";
-import notifyLeave from "./Tables/notifyLeave.vue";
+// import notifyLeave from "./Tables/notifyLeave.vue";
 import notifyPO from "./Tables/notifyPO.vue";
 import notifyPSR from "./Tables/notifyPSR.vue";
 import psrSearch from "./Tables/PSRSearch.vue";
-import myLeave from "./Tables/myLeave.vue";
+// import myLeave from "./Tables/myLeave.vue";
 import myPO from "./Tables/myPO.vue";
 import myPSR from "./Tables/myPSR.vue";
 
@@ -22,11 +22,11 @@ export {
   NavTabsTable,
   OrderedTable,
   SimpleTable,
-  notifyLeave,
+  // notifyLeave,
   notifyPO,
   notifyPSR,
   psrSearch,
-  myLeave,
+  // myLeave,
   myPO,
   myPSR
 };
