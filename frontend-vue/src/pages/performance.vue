@@ -10,14 +10,14 @@
           </template>
 
           <template slot="content">
-            <p class="category">Total Number of Purchase Order in 2020</p>
-            <h3 class="title">$34,245</h3>
+            <p class="category">Total Number of Purchase Order</p>
+            <h3 class="title">{{ totalPO }}</h3>
           </template>
 
           <template slot="footer">
             <div class="stats">
               <md-icon>date_range</md-icon>
-              Last 24 Hours
+              Current Year
             </div>
           </template>
         </stats-card>
@@ -294,7 +294,7 @@ export default {
     return {
       isEmpty: false,
       performanceData: [],
-
+      totalPO: 0,
       dailySalesChart: {
         data: {
           labels: ["M", "T", "W", "T", "F", "S", "S"],
@@ -388,11 +388,24 @@ export default {
       this.isLoading = true;
       const data = await performance.get_performance(2020);
       this.performanceData = data;
+      await this.getTotalPO(data);
       this.isLoading = false;
     } catch (err) {
       this.isLoading = false;
       this.error = err.message;
     }
   },
+  methods: {
+    async getTotalPO(data) {
+      for (let dataMonth in data.overall) {
+        this.totalPO += data.overall[dataMonth].total_po == null? 0 : parseInt(data.overall[dataMonth].total_po);
+      }
+    },
+    async getEfficiency(data) {
+      for (let dataMonth in data.overall) {
+        
+      }
+    }
+  }
 };
 </script>
