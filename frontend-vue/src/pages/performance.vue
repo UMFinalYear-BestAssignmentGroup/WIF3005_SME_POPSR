@@ -1,7 +1,6 @@
 <template>
   <div class="content">
     <div class="md-layout">
-     
       <div
         class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-25"
       >
@@ -50,20 +49,20 @@
       <div
         class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-25"
       >
-        <stats-card data-background-color="red">
+        <stats-card data-background-color="purple">
           <template slot="header">
-            <md-icon>info_outline</md-icon>
+            <md-icon>article</md-icon>
           </template>
 
           <template slot="content">
-            <p class="category">Fixed Issues</p>
+            <p class="category">Approved PO</p>
             <h3 class="title">75</h3>
           </template>
 
           <template slot="footer">
             <div class="stats">
-              <md-icon>local_offer</md-icon>
-              Tracked from Github
+              <md-icon>date_range</md-icon>
+              Current Year
             </div>
           </template>
         </stats-card>
@@ -71,25 +70,25 @@
       <div
         class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-25"
       >
-        <stats-card data-background-color="blue">
+        <stats-card data-background-color="red">
           <template slot="header">
-            <i class="fab fa-twitter"></i>
+            <i class="fas fa-file-invoice"></i>
           </template>
 
           <template slot="content">
-            <p class="category">Folowers</p>
-            <h3 class="title">+245</h3>
+            <p class="category">Rejected PO</p>
+            <h3 class="title">245</h3>
           </template>
 
           <template slot="footer">
             <div class="stats">
-              <md-icon>update</md-icon>
-              Just Updated
+              <md-icon>date_range</md-icon>
+              Current Year
             </div>
           </template>
         </stats-card>
       </div>
-       <div
+      <div
         class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-33"
       >
         <chart-card
@@ -128,9 +127,7 @@
         >
           <template slot="content">
             <h4 class="title">Email Subscription</h4>
-            <p class="category">
-              Last Campaign Performance
-            </p>
+            <p class="category">Last Campaign Performance</p>
           </template>
 
           <template slot="footer">
@@ -152,9 +149,7 @@
         >
           <template slot="content">
             <h4 class="title">Completed Tasks</h4>
-            <p class="category">
-              Last Campaign Performance
-            </p>
+            <p class="category">Last Campaign Performance</p>
           </template>
 
           <template slot="footer">
@@ -165,7 +160,7 @@
           </template>
         </chart-card>
       </div>
-       <div
+      <div
         class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-33"
       >
         <chart-card
@@ -204,9 +199,7 @@
         >
           <template slot="content">
             <h4 class="title">Email Subscription</h4>
-            <p class="category">
-              Last Campaign Performance
-            </p>
+            <p class="category">Last Campaign Performance</p>
           </template>
 
           <template slot="footer">
@@ -228,9 +221,7 @@
         >
           <template slot="content">
             <h4 class="title">Completed Tasks</h4>
-            <p class="category">
-              Last Campaign Performance
-            </p>
+            <p class="category">Last Campaign Performance</p>
           </template>
 
           <template slot="footer">
@@ -286,7 +277,7 @@ import {
   ChartCard,
   NavTabsCard,
   NavTabsTable,
-  OrderedTable
+  OrderedTable,
 } from "@/components";
 
 export default {
@@ -295,18 +286,18 @@ export default {
     ChartCard,
     NavTabsCard,
     NavTabsTable,
-    OrderedTable
+    OrderedTable,
   },
   data() {
     return {
       dailySalesChart: {
         data: {
           labels: ["M", "T", "W", "T", "F", "S", "S"],
-          series: [[12, 17, 7, 17, 23, 18, 38]]
+          series: [[12, 17, 7, 17, 23, 18, 38]],
         },
         options: {
           lineSmooth: this.$Chartist.Interpolation.cardinal({
-            tension: 0
+            tension: 0,
           }),
           low: 0,
           high: 50, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
@@ -314,19 +305,19 @@ export default {
             top: 0,
             right: 0,
             bottom: 0,
-            left: 0
-          }
-        }
+            left: 0,
+          },
+        },
       },
       dataCompletedTasksChart: {
         data: {
           labels: ["12am", "3pm", "6pm", "9pm", "12pm", "3am", "6am", "9am"],
-          series: [[230, 750, 450, 300, 280, 240, 200, 190]]
+          series: [[230, 750, 450, 300, 280, 240, 200, 190]],
         },
 
         options: {
           lineSmooth: this.$Chartist.Interpolation.cardinal({
-            tension: 0
+            tension: 0,
           }),
           low: 0,
           high: 1000, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
@@ -334,9 +325,9 @@ export default {
             top: 0,
             right: 0,
             bottom: 0,
-            left: 0
-          }
-        }
+            left: 0,
+          },
+        },
       },
       emailsSubscriptionChart: {
         data: {
@@ -352,13 +343,15 @@ export default {
             "Se",
             "Oc",
             "No",
-            "De"
+            "De",
           ],
-          series: [[542, 443, 320, 780, 553, 453, 326, 434, 568, 610, 756, 895]]
+          series: [
+            [542, 443, 320, 780, 553, 453, 326, 434, 568, 610, 756, 895],
+          ],
         },
         options: {
           axisX: {
-            showGrid: false
+            showGrid: false,
           },
           low: 0,
           high: 1000,
@@ -366,8 +359,8 @@ export default {
             top: 0,
             right: 5,
             bottom: 0,
-            left: 0
-          }
+            left: 0,
+          },
         },
         responsiveOptions: [
           [
@@ -375,15 +368,15 @@ export default {
             {
               seriesBarDistance: 5,
               axisX: {
-                labelInterpolationFnc: function(value) {
+                labelInterpolationFnc: function (value) {
                   return value[0];
-                }
-              }
-            }
-          ]
-        ]
-      }
+                },
+              },
+            },
+          ],
+        ],
+      },
     };
-  }
+  },
 };
 </script>
