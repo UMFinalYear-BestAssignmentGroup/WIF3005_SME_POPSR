@@ -31,11 +31,8 @@
           </template>
 
           <template slot="content">
-            <p class="category">Used Space</p>
-            <h3 class="title">
-              49/50
-              <small>GB</small>
-            </h3>
+            <p class="category">Efficiency for PO Approval</p>
+            <h3 class="title">{{ efficiency }}</h3>
           </template>
 
           <template slot="footer">
