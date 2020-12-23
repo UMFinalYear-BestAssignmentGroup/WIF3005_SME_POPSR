@@ -31,7 +31,7 @@
           </template>
 
           <template slot="content">
-            <p class="category">Total Efficiency</p>
+            <p class="category">Efficiency for PO Approval</p>
             <h3 class="title">{{ efficiency }}</h3>
           </template>
 
