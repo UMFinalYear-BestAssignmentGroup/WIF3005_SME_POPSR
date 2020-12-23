@@ -53,7 +53,7 @@
 
           <template slot="content">
             <p class="category">Approved PO</p>
-            <h3 class="title">75</h3>
+            <h3 class="title">{{totalPO - totalDeclinePO}}</h3>
           </template>
 
           <template slot="footer">
@@ -74,7 +74,7 @@
 
           <template slot="content">
             <p class="category">Rejected PO</p>
-            <h3 class="title">245</h3>
+            <h3 class="title">{{totalDeclinePO}}</h3>
           </template>
 
           <template slot="footer">
@@ -292,6 +292,8 @@ export default {
       isEmpty: false,
       performanceData: [],
       totalPO: 0,
+      efficiency:0,
+      totalDeclinePO:0,
       dailySalesChart: {
         data: {
           labels: ["M", "T", "W", "T", "F", "S", "S"],
@@ -386,6 +388,8 @@ export default {
       const data = await performance.get_performance(2020);
       this.performanceData = data;
       await this.getTotalPO(data);
+      await this.getEfficiency(data);
+      await this.getTotalDeclinePO(data);
       this.isLoading = false;
     } catch (err) {
       this.isLoading = false;
@@ -399,7 +403,6 @@ export default {
       }
     },
     
-    
     async getEfficiency(data) {
       let totalEfficiency = 0;
       for (let dataMonth in data.overall) {
@@ -407,7 +410,13 @@ export default {
         totalEfficiency += data.overall[dataMonth].po_efficiency == null? 0 : parseInt(data.overall[dataMonth].po_efficiency);
       }
       this.efficiency = (totalEfficiency/12).toFixed(2);
-    }
+    },
+
+    async getTotalDeclinePO(data) {
+      for (let dataMonth in data.overall) {
+        this.totalDeclinePO += data.overall[dataMonth].total_po_decline == null? 0 : parseInt(data.overall[dataMonth].total_po_decline);
+      }
+    },
   
   }
 };
