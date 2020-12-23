@@ -389,7 +389,6 @@ export default {
       const data = await performance.get_performance(2020);
       this.performanceData = data;
       await this.getTotalPO(data);
-      await this.getTotalDeclinePO(data);
       this.isLoading = false;
     } catch (err) {
       this.isLoading = false;
@@ -406,12 +405,7 @@ export default {
       for (let dataMonth in data.overall) {
         
       }
-    },
-    async getTotalDeclinePO(data) {
-      for (let dataMonth in data.overall) {
-        this.totalDeclinePO += data.overall[dataMonth].total_po_decline == null? 0 : parseInt(data.overall[dataMonth].total_po_decline);
-      }
-    },
+    }
   }
 };
 </script>
