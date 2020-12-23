@@ -77,7 +77,7 @@
 
           <template slot="content">
             <p class="category">Rejected PO</p>
-            <h3 class="title">{{ totalDeclinePO }}</h3>
+            <h3 class="title">245</h3>
           </template>
 
           <template slot="footer">
@@ -295,7 +295,6 @@ export default {
       isEmpty: false,
       performanceData: [],
       totalPO: 0,
-      totalDeclinePO:0,
       dailySalesChart: {
         data: {
           labels: ["M", "T", "W", "T", "F", "S", "S"],
