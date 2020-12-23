@@ -3,6 +3,10 @@
 
     <side-bar>
       <mobile-menu slot="content"></mobile-menu>
+      <sidebar-link v-if="is_admin == 'true'" :to="{ name: 'Performance', params: { id: this.id } }">
+        <!-- <md-icon>dashboard</md-icon> -->
+        <p>Dashboard</p>
+      </sidebar-link>
       <sidebar-link v-if="is_admin == 'true'" :to="{ name: 'Staff Registration', params: { id: this.id } }">
         <!-- <md-icon>dashboard</md-icon> -->
         <p>Register</p>
