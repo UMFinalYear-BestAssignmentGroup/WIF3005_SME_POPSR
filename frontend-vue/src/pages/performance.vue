@@ -398,11 +398,17 @@ export default {
         this.totalPO += data.overall[dataMonth].total_po == null? 0 : parseInt(data.overall[dataMonth].total_po);
       }
     },
+    
+    
     async getEfficiency(data) {
+      let totalEfficiency = 0;
       for (let dataMonth in data.overall) {
         
+        totalEfficiency += data.overall[dataMonth].po_efficiency == null? 0 : parseInt(data.overall[dataMonth].po_efficiency);
       }
+      this.efficiency = (totalEfficiency/12).toFixed(2);
     }
+  
   }
 };
 </script>
