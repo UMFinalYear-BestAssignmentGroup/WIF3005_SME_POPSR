@@ -31,17 +31,14 @@
           </template>
 
           <template slot="content">
-            <p class="category">Used Space</p>
-            <h3 class="title">
-              49/50
-              <small>GB</small>
-            </h3>
+            <p class="category">Total Efficiency</p>
+            <h3 class="title">{{ efficiency }}</h3>
           </template>
 
           <template slot="footer">
             <div class="stats">
-              <md-icon class="text-danger">warning</md-icon>
-              <a href="#pablo">Get More Space...</a>
+              <md-icon>date_range</md-icon>
+              Current Year
             </div>
           </template>
         </stats-card>
@@ -295,6 +292,7 @@ export default {
       isEmpty: false,
       performanceData: [],
       totalPO: 0,
+      efficiency: 0,
       dailySalesChart: {
         data: {
           labels: ["M", "T", "W", "T", "F", "S", "S"],
@@ -389,6 +387,7 @@ export default {
       const data = await performance.get_performance(2020);
       this.performanceData = data;
       await this.getTotalPO(data);
+      await this.getEfficiency(data);
       this.isLoading = false;
     } catch (err) {
       this.isLoading = false;
@@ -402,9 +401,11 @@ export default {
       }
     },
     async getEfficiency(data) {
+      let totalEfficiency = 0;
       for (let dataMonth in data.overall) {
-        
+        totalEfficiency += data.overall[dataMonth].po_efficiency == null? 0 : parseInt(data.overall[dataMonth].po_efficiency);
       }
+      this.efficiency = (totalEfficiency/12).toFixed(2);
     }
   }
 };
