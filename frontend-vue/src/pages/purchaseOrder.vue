@@ -247,7 +247,7 @@
             >
             <md-button
               class="md-raised"
-              @click="back()"
+              @click="prev()"
               style="float:right"
               >Previous</md-button
             >
