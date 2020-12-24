@@ -404,7 +404,10 @@ export default {
             alert("Fill all the required fields");
     },
     back(){
-      this.$router.push(-1);
+      // this.$router.push(-1);
+      this.$router.push({
+        path: `/enterPSR/${localStorage.id}/`
+      });
     },
     submit() {
       alert("Submit to blah and show blah and etc.");
