@@ -139,14 +139,14 @@
         class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-50"
       >
         <chart-card
-          :chart-data="dataCompletedTasksChart.data"
-          :chart-options="dataCompletedTasksChart.options"
+          :chart-data="pendingOneChart.data"
+          :chart-options="pendingOneChart.options"
           :chart-type="'Line'"
           data-background-color="green"
         >
           <template slot="content">
-            <h4 class="title">Completed Tasks</h4>
-            <p class="category">Last Campaign Performance</p>
+            <h4 class="title">Pending 1</h4>
+            <p class="category">Time taken for First Approval</p>
           </template>
 
           <template slot="footer">
@@ -161,18 +161,16 @@
         class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-50"
       >
         <chart-card
-          :chart-data="dailySalesChart.data"
-          :chart-options="dailySalesChart.options"
+          :chart-data="pendingTwoChart.data"
+          :chart-options="pendingTwoChart.options"
           :chart-type="'Line'"
           data-background-color="blue"
         >
           <template slot="content">
-            <h4 class="title">Daily Sales</h4>
+            <h4 class="title">Pending 2</h4>
             <p class="category">
-              <span class="text-success"
-                ><i class="fas fa-long-arrow-alt-up"></i> 55%
-              </span>
-              increase in today sales.
+              
+              Time taken for Second Approval
             </p>
           </template>
 
@@ -188,15 +186,15 @@
         class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-50"
       >
         <chart-card
-          :chart-data="emailsSubscriptionChart.data"
-          :chart-options="emailsSubscriptionChart.options"
-          :chart-responsive-options="emailsSubscriptionChart.responsiveOptions"
+          :chart-data="approvalChart.data"
+          :chart-options="approvalChart.options"
+          :chart-responsive-options="approvalChart.responsiveOptions"
           :chart-type="'Bar'"
           data-background-color="red"
         >
           <template slot="content">
-            <h4 class="title">Email Subscription</h4>
-            <p class="category">Last Campaign Performance</p>
+            <h4 class="title">Approval</h4>
+            <p class="category">Time Taken for Final Approval</p>
           </template>
 
           <template slot="footer">
@@ -211,14 +209,14 @@
         class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-50"
       >
         <chart-card
-          :chart-data="dataCompletedTasksChart.data"
-          :chart-options="dataCompletedTasksChart.options"
+          :chart-data="dataDeclineChart.data"
+          :chart-options="dataDeclineChart.options"
           :chart-type="'Line'"
           data-background-color="green"
         >
           <template slot="content">
-            <h4 class="title">Completed Tasks</h4>
-            <p class="category">Last Campaign Performance</p>
+            <h4 class="title">Decline</h4>
+            <p class="category">Time taken for Decline</p>
           </template>
 
           <template slot="footer">
@@ -345,9 +343,9 @@ export default {
           ],
         ],
       },
-      dailySalesChart: {
+      pendingOneChart: {
         data: {
-          labels: ["M", "T", "W", "T", "F", "S", "S"],
+          labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
           series: [[12, 17, 7, 17, 23, 18, 38]],
         },
         options: {
@@ -364,18 +362,17 @@ export default {
           },
         },
       },
-      dataCompletedTasksChart: {
+      pendingTwoChart: {
         data: {
-          labels: ["12am", "3pm", "6pm", "9pm", "12pm", "3am", "6am", "9am"],
-          series: [[230, 750, 450, 300, 280, 240, 200, 190]],
+          labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+          series: [],
         },
-
         options: {
           lineSmooth: this.$Chartist.Interpolation.cardinal({
             tension: 0,
           }),
           low: 0,
-          high: 1000, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
+          high: 10, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
           chartPadding: {
             top: 0,
             right: 0,
@@ -384,32 +381,17 @@ export default {
           },
         },
       },
-      emailsSubscriptionChart: {
+      approvalChart: {
         data: {
-          labels: [
-            "Ja",
-            "Fe",
-            "Ma",
-            "Ap",
-            "Mai",
-            "Ju",
-            "Jul",
-            "Au",
-            "Se",
-            "Oc",
-            "No",
-            "De",
-          ],
-          series: [
-            [542, 443, 320, 780, 553, 453, 326, 434, 568, 610, 756, 895],
-          ],
+          labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+          series: [],
         },
         options: {
           axisX: {
             showGrid: false,
           },
           low: 0,
-          high: 1000,
+          high: 30,
           chartPadding: {
             top: 0,
             right: 5,
@@ -431,6 +413,26 @@ export default {
           ],
         ],
       },
+      dataDeclineChart: {
+        data: {
+          labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+          series: [],
+        },
+
+        options: {
+          lineSmooth: this.$Chartist.Interpolation.cardinal({
+            tension: 0,
+          }),
+          low: 0,
+          high: 25, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
+          chartPadding: {
+            top: 0,
+            right: 0,
+            bottom: 0,
+            left: 0,
+          },
+        },
+      },
     };
   },
   async created() {
@@ -443,6 +445,10 @@ export default {
       await this.getTotalDeclinePO(data);
       await this.getTotalPOseries(data);
       await this.getTotalPODeclineSeries(data);
+      await this.getPendingOneseries(data);
+      await this.getPendingTwoseries(data);
+      await this.getApprovalseries(data);
+      await this.getDeclineseries(data);
       this.isLoading = false;
     } catch (err) {
       this.isLoading = false;
@@ -468,6 +474,7 @@ export default {
       for (let dataMonth in data.overall) {
         this.totalDeclinePO += data.overall[dataMonth].total_po_decline == null? 0 : parseInt(data.overall[dataMonth].total_po_decline);
       }
+
     },
 
     async getTotalPOseries(data) {
@@ -484,7 +491,43 @@ export default {
         PODeclineSeries.push(data.overall[dataMonth].total_po_decline == null? 0 : parseInt(data.overall[dataMonth].total_po_decline));
       }
       this.totalPODeclineChart.data.series.push(PODeclineSeries);
-    }
+    },
+    async getPendingOneseries(data) {
+      let series = Array();
+      for (let dataMonth in data.overall) {
+        series.push(data.overall[dataMonth].tmp_average_po.pending_1.minutes == null? 0 : parseInt(data.overall[dataMonth].tmp_average_po.pending_1.minutes));
+      }
+      this.pendingOneChart.data.series.push(series);
+      console.log(this.pendingOneChart.data.series);
+
+    },
+    async getPendingTwoseries(data) {
+      let series = Array();
+      for (let dataMonth in data.overall) {
+        series.push(data.overall[dataMonth].tmp_average_po.pending_2.minutes == null? 0 : parseInt(data.overall[dataMonth].tmp_average_po.pending_2.minutes));
+      }
+      this.pendingTwoChart.data.series.push(series);
+      console.log(this.pendingTwoChart.data.series);
+
+    },
+    async getApprovalseries(data) {
+      let series = Array();
+      for (let dataMonth in data.overall) {
+        series.push(data.overall[dataMonth].tmp_average_po.approve.minutes == null? 0 : parseInt(data.overall[dataMonth].tmp_average_po.approve.minutes));
+      }
+      this.approvalChart.data.series.push(series);
+      console.log(this.approvalChart.data.series);
+    },
+    async getDeclineseries(data) {
+      let series = Array();
+      for (let dataMonth in data.overall) {
+        series.push(data.overall[dataMonth].tmp_average_po.decline.minutes == null? 0 : parseInt(data.overall[dataMonth].tmp_average_po.decline.minutes));
+      }
+      this.dataDeclineChart.data.series.push(series);
+      console.log(this.dataDeclineChart.data.series);
+
+    },
+
   
   }
 };
