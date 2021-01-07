@@ -194,7 +194,12 @@
         <br /><br /><br />
         
         <md-dialog :md-active.sync="showDialog" style="width:100%; overflow:auto;">
-            <md-dialog-title>Purchase Order Details</md-dialog-title>
+            <md-dialog-title>
+              Purchase Order Details 
+              <span class="tag is-warning" v-if="psrs.status_decline == false && psrs.status_t2 == false">Pending</span>
+              <span class="tag is-danger" v-else-if="psrs.status_decline == true">Declined</span>
+              <span class="tag is-success" v-else>Approved</span>
+            </md-dialog-title>
             <md-content>
               <table cls="clsFormDetails" width="95%:" style="margin-left: 3%;">
                     <col width="25%">
