@@ -13,7 +13,7 @@
             v-if="psrs.status_decline == false && psrs.status_t2 == false"
             @click="showDialog = true"
             class="alert alert-warning"
-            style="border-radius:30px;"
+            style="border-radius:30px;cursor: pointer;"
           >
             <h4>
               <center><strong> Status: Pending </strong></center>
@@ -23,7 +23,7 @@
             v-else-if="psrs.status_decline == true"
             @click="showDialog = true"
             class="alert alert-danger"
-            style="border-radius:30px;"
+            style="border-radius:30px;cursor: pointer;"
           >
             <h4>
               <center><strong> Status: Declined </strong></center>
@@ -32,7 +32,7 @@
           <div
             v-else
             class="alert alert-success"
-            style="border-radius:30px;"
+            style="border-radius:30px;cursor: pointer;"
             @click="showDialog = true"
           >
             <h4>
