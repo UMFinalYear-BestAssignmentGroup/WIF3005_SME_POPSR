@@ -2,6 +2,33 @@
   <div class="content">
     <div class="md-layout">
       <div
+        class="md-layout-item md-medium-size-90 md-xsmall-size-90 md-size-90"
+      >
+        <table cls="clsForm" width="80%:">
+          <col width="15%" />
+          <col width="70%" />
+          <tr>
+            <td class="clsLabel">
+              Year:
+            </td>
+            <td class="clsValue">
+              <b-input v-model="year" style="width: 98%"></b-input>
+              <div class="error" v-if="!$v.year.required && isPosted">
+                Year is required
+              </div>
+            </td>
+            <td>
+              <md-button
+                class="md-raised md-success"
+                @click="filter_year()"
+                style="margin: auto; display: block"
+                >Filter</md-button
+              >
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div
         class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-25"
       >
         <stats-card data-background-color="green">
@@ -229,25 +256,24 @@
 
 <script>
 import performance from "@/js/performance.js";
-
-import {
-  StatsCard,
-  ChartCard
-} from "@/components";
+import { required } from "vuelidate/lib/validators";
+import { StatsCard, ChartCard } from "@/components";
 
 export default {
   components: {
     StatsCard,
-    ChartCard
+    ChartCard,
   },
   data() {
     return {
       isEmpty: false,
+      year: 2021,
       performanceData: [],
       totalPO: 0,
       efficiency: 0,
       totalDeclinePO: 0,
       componentKey: 0,
+      isPosted: false,
       totalPOChart: {
         data: {
           labels: [
@@ -264,7 +290,7 @@ export default {
             "Nov",
             "Dec",
           ],
-          series: []
+          series: [],
         },
         options: {
           lineSmooth: this.$Chartist.Interpolation.cardinal({
@@ -280,9 +306,9 @@ export default {
           },
           tooltips: {
             enabled: true,
-            display: true
-          }
-        }
+            display: true,
+          },
+        },
       },
       totalPODeclineChart: {
         data: {
@@ -313,7 +339,7 @@ export default {
             right: 5,
             bottom: 0,
             left: 0,
-          }
+          },
         },
         responsiveOptions: [
           [
@@ -358,7 +384,7 @@ export default {
             right: 0,
             bottom: 0,
             left: 0,
-          }
+          },
         },
       },
       pendingTwoChart: {
@@ -390,7 +416,7 @@ export default {
             right: 0,
             bottom: 0,
             left: 0,
-          }
+          },
         },
       },
       approvalChart: {
@@ -422,7 +448,7 @@ export default {
             right: 5,
             bottom: 0,
             left: 0,
-          }
+          },
         },
         responsiveOptions: [
           [
@@ -468,7 +494,7 @@ export default {
             right: 0,
             bottom: 0,
             left: 0,
-          }
+          },
         },
       },
     };
@@ -476,17 +502,9 @@ export default {
   async created() {
     try {
       this.isLoading = true;
-      const data = await performance.get_performance(2021);
+      const data = await performance.get_performance(this.year);
       this.performanceData = data;
-      await this.getTotalPO(data);
-      await this.getEfficiency(data);
-      await this.getTotalDeclinePO(data);
-      await this.getTotalPOseries(data);
-      await this.getTotalPODeclineSeries(data);
-      await this.getPendingOneseries(data);
-      await this.getPendingTwoseries(data);
-      await this.getApprovalseries(data);
-      await this.getDeclineseries(data);
+      this.getAllData(this.performanceData);
       this.isLoading = false;
       this.forceRender();
     } catch (err) {
@@ -494,7 +512,30 @@ export default {
       this.error = err.message;
     }
   },
+  validations: {
+    year: {
+      required,
+    },
+  },
   methods: {
+    async filter_year() {
+      this.isPosted = true;
+      if (!this.$v.$invalid) {
+        try {
+          this.isLoading = true;
+          this.performanceData = await performance.get_performance(this.year);
+          console.log(this.year);
+          console.log(this.performanceData);
+          // this.getAllData(newData);
+          this.isLoading = false;
+          this.forceRender();
+        } catch (err) {
+          this.isLoading = false;
+          alert(err);
+          this.error = err.message;
+        }
+      } else alert("Fill the required fields");
+    },
     async getTotalPO(data) {
       for (let dataMonth in data.overall) {
         this.totalPO +=
@@ -594,6 +635,17 @@ export default {
     forceRender() {
       this.componentKey += 1;
     },
+    async getAllData(data) {
+      await this.getTotalPO(data);
+      await this.getEfficiency(data);
+      await this.getTotalDeclinePO(data);
+      await this.getTotalPOseries(data);
+      await this.getTotalPODeclineSeries(data);
+      await this.getPendingOneseries(data);
+      await this.getPendingTwoseries(data);
+      await this.getApprovalseries(data);
+      await this.getDeclineseries(data);
+    }
   },
 };
 </script>
