@@ -277,6 +277,10 @@ export default {
             right: 0,
             bottom: 0,
             left: 0,
+          },
+          tooltips: {
+            enabled: true,
+            display: true
           }
         }
       },
@@ -412,7 +416,7 @@ export default {
             showGrid: false,
           },
           low: 0,
-          high: 100,
+          high: 150,
           chartPadding: {
             top: 0,
             right: 5,
@@ -458,7 +462,7 @@ export default {
             tension: 0,
           }),
           low: 0,
-          high: 100, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
+          high: 150, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
           chartPadding: {
             top: 0,
             right: 0,
