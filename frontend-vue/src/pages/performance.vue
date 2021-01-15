@@ -522,11 +522,10 @@ export default {
       this.isPosted = true;
       if (!this.$v.$invalid) {
         try {
+          this.performanceData = [];
           this.isLoading = true;
           this.performanceData = await performance.get_performance(this.year);
-          console.log(this.year);
-          console.log(this.performanceData);
-          // this.getAllData(newData);
+          this.getAllData(this.performanceData);
           this.isLoading = false;
           this.forceRender();
         } catch (err) {
@@ -537,6 +536,7 @@ export default {
       } else alert("Fill the required fields");
     },
     async getTotalPO(data) {
+      this.totalPO = 0;
       for (let dataMonth in data.overall) {
         this.totalPO +=
           data.overall[dataMonth].total_po == null
@@ -547,6 +547,7 @@ export default {
 
     async getEfficiency(data) {
       let totalEfficiency = 0;
+      this.efficiency = 0;
       for (let dataMonth in data.overall) {
         totalEfficiency +=
           data.overall[dataMonth].po_efficiency == null
@@ -557,6 +558,7 @@ export default {
     },
 
     async getTotalDeclinePO(data) {
+      this.totalDeclinePO = 0;
       for (let dataMonth in data.overall) {
         this.totalDeclinePO +=
           data.overall[dataMonth].total_po_decline == null
@@ -566,6 +568,7 @@ export default {
     },
 
     async getTotalPOseries(data) {
+      this.totalPOChart.data.series.pop();
       let POseries = Array();
       for (let dataMonth in data.overall) {
         POseries.push(
@@ -578,6 +581,7 @@ export default {
     },
 
     async getTotalPODeclineSeries(data) {
+      this.totalPODeclineChart.data.series.pop();
       let PODeclineSeries = Array();
       for (let dataMonth in data.overall) {
         PODeclineSeries.push(
@@ -589,6 +593,7 @@ export default {
       this.totalPODeclineChart.data.series.push(PODeclineSeries);
     },
     async getPendingOneseries(data) {
+      this.pendingOneChart.data.series.pop();
       let series = Array();
       for (let dataMonth in data.overall) {
         series.push(
@@ -600,6 +605,7 @@ export default {
       this.pendingOneChart.data.series.push(series);
     },
     async getPendingTwoseries(data) {
+      this.pendingTwoChart.data.series.pop();
       let series = Array();
       for (let dataMonth in data.overall) {
         series.push(
@@ -611,6 +617,7 @@ export default {
       this.pendingTwoChart.data.series.push(series);
     },
     async getApprovalseries(data) {
+      this.approvalChart.data.series.pop();
       let series = Array();
       for (let dataMonth in data.overall) {
         series.push(
@@ -622,6 +629,7 @@ export default {
       this.approvalChart.data.series.push(series);
     },
     async getDeclineseries(data) {
+      this.dataDeclineChart.data.series.pop();
       let series = Array();
       for (let dataMonth in data.overall) {
         series.push(
