@@ -8,9 +8,7 @@
           <col width="15%" />
           <col width="70%" />
           <tr>
-            <td class="clsLabel">
-              Year:
-            </td>
+            <td class="clsLabel">Year:</td>
             <td class="clsValue">
               <b-input v-model="year" style="width: 98%"></b-input>
               <div class="error" v-if="!$v.year.required && isPosted">
@@ -33,18 +31,18 @@
       >
         <stats-card data-background-color="green">
           <template slot="header">
-            <md-icon>text_snippet</md-icon>
+            <md-icon>article</md-icon>
           </template>
 
           <template slot="content">
-            <p class="category">Total Number of PO</p>
-            <h3 class="title">{{ totalPO }}</h3>
+            <p class="category">Total Approve PO/Total PO</p>
+            <h3 class="title">{{ totalPO - totalDeclinePO }}/{{ totalPO }}</h3>
           </template>
 
           <template slot="footer">
             <div class="stats">
               <md-icon>date_range</md-icon>
-              {{ new Date().getFullYear() }}
+              {{ year }}
             </div>
           </template>
         </stats-card>
@@ -59,13 +57,13 @@
 
           <template slot="content">
             <p class="category">Efficiency for PO Approval</p>
-            <h3 class="title">{{ efficiency }}</h3>
+            <h3 class="title">{{ POefficiency }}</h3>
           </template>
 
           <template slot="footer">
             <div class="stats">
               <md-icon>date_range</md-icon>
-              {{ new Date().getFullYear() }}
+              {{ year }}
             </div>
           </template>
         </stats-card>
@@ -79,14 +77,16 @@
           </template>
 
           <template slot="content">
-            <p class="category">Approved PO</p>
-            <h3 class="title">{{ totalPO - totalDeclinePO }}</h3>
+            <p class="category">Total Approve PSR/Total PSR</p>
+            <h3 class="title">
+              {{ totalPSR - totalDeclinePSR }}/{{ totalPSR }}
+            </h3>
           </template>
 
           <template slot="footer">
             <div class="stats">
               <md-icon>date_range</md-icon>
-              {{ new Date().getFullYear() }}
+              {{ year }}
             </div>
           </template>
         </stats-card>
@@ -96,18 +96,18 @@
       >
         <stats-card data-background-color="red">
           <template slot="header">
-            <i class="fas fa-file-invoice"></i>
+            <md-icon>content_copy</md-icon>
           </template>
 
           <template slot="content">
-            <p class="category">Rejected PO</p>
-            <h3 class="title">{{ totalDeclinePO }}</h3>
+            <p class="category">Efficiency for PSR Approval</p>
+            <h3 class="title">{{ PSRefficiency }}</h3>
           </template>
 
           <template slot="footer">
             <div class="stats">
               <md-icon>date_range</md-icon>
-              {{ new Date().getFullYear() }}
+              {{ year }}
             </div>
           </template>
         </stats-card>
@@ -116,37 +116,16 @@
         class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-50"
       >
         <chart-card
-          :chart-data="totalPOChart.data"
-          :chart-options="totalPOChart.options"
-          :chart-type="'Line'"
-          :key="componentKey"
-          data-background-color="blue"
-        >
-          <template slot="content">
-            <h4 class="title">Total PO</h4>
-          </template>
-
-          <template slot="footer">
-            <div class="stats">
-              <md-icon>access_time</md-icon>
-              {{ new Date().toLocaleString() }}
-            </div>
-          </template>
-        </chart-card>
-      </div>
-      <div
-        class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-50"
-      >
-        <chart-card
-          :chart-data="totalPODeclineChart.data"
-          :chart-options="totalPODeclineChart.options"
-          :chart-responsive-options="totalPODeclineChart.responsiveOptions"
+          :chart-data="POapprovalChart.data"
+          :chart-options="POapprovalChart.options"
+          :chart-responsive-options="POapprovalChart.responsiveOptions"
           :chart-type="'Bar'"
           :key="componentKey"
           data-background-color="red"
         >
           <template slot="content">
-            <h4 class="title">Total Declined PO</h4>
+            <h4 class="title">PO Approval Per Month</h4>
+            <p class="category">Time Taken for Final Approval (Min)</p>
           </template>
 
           <template slot="footer">
@@ -161,15 +140,38 @@
         class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-50"
       >
         <chart-card
-          :chart-data="pendingOneChart.data"
-          :chart-options="pendingOneChart.options"
+          :chart-data="POdataDeclineChart.data"
+          :chart-options="POdataDeclineChart.options"
+          :chart-type="'Bar'"
+          :key="componentKey"
+          data-background-color="green"
+        >
+          <template slot="content">
+            <h4 class="title">PO Decline Per Month</h4>
+            <p class="category">Time taken for Decline (Min)</p>
+          </template>
+
+          <template slot="footer">
+            <div class="stats">
+              <md-icon>access_time</md-icon>
+              {{ new Date().toLocaleString() }}
+            </div>
+          </template>
+        </chart-card>
+      </div>
+      <div
+        class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-50"
+      >
+        <chart-card
+          :chart-data="POpendingOneChart.data"
+          :chart-options="POpendingOneChart.options"
           :chart-type="'Line'"
           :key="componentKey"
           data-background-color="green"
         >
           <template slot="content">
-            <h4 class="title">Pending 1</h4>
-            <p class="category">Time taken for First Approval</p>
+            <h4 class="title">PO Pending 1</h4>
+            <p class="category">Time taken for First Approval (Min)</p>
           </template>
 
           <template slot="footer">
@@ -184,15 +186,15 @@
         class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-50"
       >
         <chart-card
-          :chart-data="pendingTwoChart.data"
-          :chart-options="pendingTwoChart.options"
+          :chart-data="POpendingTwoChart.data"
+          :chart-options="POpendingTwoChart.options"
           :chart-type="'Line'"
           :key="componentKey"
           data-background-color="blue"
         >
           <template slot="content">
-            <h4 class="title">Pending 2</h4>
-            <p class="category">Time taken for Second Approval</p>
+            <h4 class="title">PO Pending 2</h4>
+            <p class="category">Time taken for Second Approval (Min)</p>
           </template>
 
           <template slot="footer">
@@ -203,20 +205,21 @@
           </template>
         </chart-card>
       </div>
+
       <div
         class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-50"
       >
         <chart-card
-          :chart-data="approvalChart.data"
-          :chart-options="approvalChart.options"
-          :chart-responsive-options="approvalChart.responsiveOptions"
+          :chart-data="PSRapprovalChart.data"
+          :chart-options="PSRapprovalChart.options"
+          :chart-responsive-options="PSRapprovalChart.responsiveOptions"
           :chart-type="'Bar'"
           :key="componentKey"
           data-background-color="red"
         >
           <template slot="content">
-            <h4 class="title">Approval</h4>
-            <p class="category">Time Taken for Final Approval</p>
+            <h4 class="title">PSR Approval Per Month</h4>
+            <p class="category">Time Taken for Final Approval (Min)</p>
           </template>
 
           <template slot="footer">
@@ -231,15 +234,61 @@
         class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-50"
       >
         <chart-card
-          :chart-data="dataDeclineChart.data"
-          :chart-options="dataDeclineChart.options"
+          :chart-data="PSRdataDeclineChart.data"
+          :chart-options="PSRdataDeclineChart.options"
+          :chart-type="'Bar'"
+          :key="componentKey"
+          data-background-color="green"
+        >
+          <template slot="content">
+            <h4 class="title">PSR Decline Per Month</h4>
+            <p class="category">Time taken for Decline (Min)</p>
+          </template>
+
+          <template slot="footer">
+            <div class="stats">
+              <md-icon>access_time</md-icon>
+              {{ new Date().toLocaleString() }}
+            </div>
+          </template>
+        </chart-card>
+      </div>
+      <div
+        class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-50"
+      >
+        <chart-card
+          :chart-data="PSRpendingOneChart.data"
+          :chart-options="PSRpendingOneChart.options"
           :chart-type="'Line'"
           :key="componentKey"
           data-background-color="green"
         >
           <template slot="content">
-            <h4 class="title">Decline</h4>
-            <p class="category">Time taken for Decline</p>
+            <h4 class="title">PSR Pending 1</h4>
+            <p class="category">Time taken for First Approval (Min)</p>
+          </template>
+
+          <template slot="footer">
+            <div class="stats">
+              <md-icon>access_time</md-icon>
+              {{ new Date().toLocaleString() }}
+            </div>
+          </template>
+        </chart-card>
+      </div>
+      <div
+        class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-50"
+      >
+        <chart-card
+          :chart-data="PSRpendingTwoChart.data"
+          :chart-options="PSRpendingTwoChart.options"
+          :chart-type="'Line'"
+          :key="componentKey"
+          data-background-color="blue"
+        >
+          <template slot="content">
+            <h4 class="title">PSR Pending 2</h4>
+            <p class="category">Time taken for Second Approval (Min)</p>
           </template>
 
           <template slot="footer">
@@ -270,92 +319,15 @@ export default {
       year: 2021,
       performanceData: [],
       totalPO: 0,
-      efficiency: 0,
+      totalPSR: 0,
+      POefficiency: 0,
+      PSRefficiency: 0,
       totalDeclinePO: 0,
+      totalDeclinePSR: 0,
       componentKey: 0,
       isPosted: false,
-      totalPOChart: {
-        data: {
-          labels: [
-            "Jan",
-            "Feb",
-            "Mar",
-            "Apr",
-            "May",
-            "Jun",
-            "Jul",
-            "Aug",
-            "Sep",
-            "Oct",
-            "Nov",
-            "Dec",
-          ],
-          series: [],
-        },
-        options: {
-          lineSmooth: this.$Chartist.Interpolation.cardinal({
-            tension: 0,
-          }),
-          low: 0,
-          high: 100,
-          chartPadding: {
-            top: 0,
-            right: 0,
-            bottom: 0,
-            left: 0,
-          },
-          tooltips: {
-            enabled: true,
-            display: true,
-          },
-        },
-      },
-      totalPODeclineChart: {
-        data: {
-          labels: [
-            "Jan",
-            "Feb",
-            "Mar",
-            "Apr",
-            "May",
-            "Jun",
-            "Jul",
-            "Aug",
-            "Sep",
-            "Oct",
-            "Nov",
-            "Dec",
-          ],
-          series: [],
-        },
-        options: {
-          axisX: {
-            showGrid: false,
-          },
-          low: 0,
-          high: 100,
-          chartPadding: {
-            top: 0,
-            right: 5,
-            bottom: 0,
-            left: 0,
-          },
-        },
-        responsiveOptions: [
-          [
-            "screen and (max-width: 640px)",
-            {
-              seriesBarDistance: 5,
-              axisX: {
-                labelInterpolationFnc: function (value) {
-                  return value[0];
-                },
-              },
-            },
-          ],
-        ],
-      },
-      pendingOneChart: {
+
+      POpendingOneChart: {
         data: {
           labels: [
             "Jan",
@@ -387,7 +359,7 @@ export default {
           },
         },
       },
-      pendingTwoChart: {
+      POpendingTwoChart: {
         data: {
           labels: [
             "Jan",
@@ -419,7 +391,7 @@ export default {
           },
         },
       },
-      approvalChart: {
+      POapprovalChart: {
         data: {
           labels: [
             "Jan",
@@ -464,7 +436,7 @@ export default {
           ],
         ],
       },
-      dataDeclineChart: {
+      POdataDeclineChart: {
         data: {
           labels: [
             "Jan",
@@ -489,6 +461,148 @@ export default {
           }),
           low: 0,
           high: 150, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
+          chartPadding: {
+            top: 0,
+            right: 0,
+            bottom: 0,
+            left: 0,
+          },
+        },
+      },
+      PSRpendingOneChart: {
+        data: {
+          labels: [
+            "Jan",
+            "Feb",
+            "Mar",
+            "Apr",
+            "May",
+            "Jun",
+            "Jul",
+            "Aug",
+            "Sep",
+            "Oct",
+            "Nov",
+            "Dec",
+          ],
+          series: [],
+        },
+        options: {
+          lineSmooth: this.$Chartist.Interpolation.cardinal({
+            tension: 0,
+          }),
+          low: 0,
+          high: 240, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
+          chartPadding: {
+            top: 0,
+            right: 0,
+            bottom: 0,
+            left: 0,
+          },
+        },
+      },
+      PSRpendingTwoChart: {
+        data: {
+          labels: [
+            "Jan",
+            "Feb",
+            "Mar",
+            "Apr",
+            "May",
+            "Jun",
+            "Jul",
+            "Aug",
+            "Sep",
+            "Oct",
+            "Nov",
+            "Dec",
+          ],
+          series: [],
+        },
+        options: {
+          lineSmooth: this.$Chartist.Interpolation.cardinal({
+            tension: 0,
+          }),
+          low: 0,
+          high: 240, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
+          chartPadding: {
+            top: 0,
+            right: 0,
+            bottom: 0,
+            left: 0,
+          },
+        },
+      },
+      PSRapprovalChart: {
+        data: {
+          labels: [
+            "Jan",
+            "Feb",
+            "Mar",
+            "Apr",
+            "May",
+            "Jun",
+            "Jul",
+            "Aug",
+            "Sep",
+            "Oct",
+            "Nov",
+            "Dec",
+          ],
+          series: [],
+        },
+        options: {
+          axisX: {
+            showGrid: false,
+          },
+          low: 0,
+          high: 240,
+          chartPadding: {
+            top: 0,
+            right: 5,
+            bottom: 0,
+            left: 0,
+          },
+        },
+        responsiveOptions: [
+          [
+            "screen and (max-width: 640px)",
+            {
+              seriesBarDistance: 5,
+              axisX: {
+                labelInterpolationFnc: function (value) {
+                  return value[0];
+                },
+              },
+            },
+          ],
+        ],
+      },
+      PSRdataDeclineChart: {
+        data: {
+          labels: [
+            "Jan",
+            "Feb",
+            "Mar",
+            "Apr",
+            "May",
+            "Jun",
+            "Jul",
+            "Aug",
+            "Sep",
+            "Oct",
+            "Nov",
+            "Dec",
+          ],
+          series: [],
+        },
+
+        options: {
+          lineSmooth: this.$Chartist.Interpolation.cardinal({
+            tension: 0,
+          }),
+          low: 0,
+          high: 240, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
           chartPadding: {
             top: 0,
             right: 0,
@@ -545,16 +659,16 @@ export default {
       }
     },
 
-    async getEfficiency(data) {
+    async getPOEfficiency(data) {
       let totalEfficiency = 0;
-      this.efficiency = 0;
+      this.POefficiency = 0;
       for (let dataMonth in data.overall) {
         totalEfficiency +=
           data.overall[dataMonth].po_efficiency == null
             ? 0
             : parseInt(data.overall[dataMonth].po_efficiency);
       }
-      this.efficiency = (totalEfficiency / 12).toFixed(2);
+      this.POefficiency = (totalEfficiency / 12).toFixed(2);
     },
 
     async getTotalDeclinePO(data) {
@@ -566,34 +680,40 @@ export default {
             : parseInt(data.overall[dataMonth].total_po_decline);
       }
     },
-
-    async getTotalPOseries(data) {
-      this.totalPOChart.data.series.pop();
-      let POseries = Array();
+    async getTotalPSR(data) {
+      this.totalPSR = 0;
       for (let dataMonth in data.overall) {
-        POseries.push(
-          data.overall[dataMonth].total_po == null
+        this.totalPSR +=
+          data.overall[dataMonth].total_psr == null
             ? 0
-            : parseInt(data.overall[dataMonth].total_po)
-        );
+            : parseInt(data.overall[dataMonth].total_psr);
       }
-      this.totalPOChart.data.series.push(POseries);
     },
 
-    async getTotalPODeclineSeries(data) {
-      this.totalPODeclineChart.data.series.pop();
-      let PODeclineSeries = Array();
+    async getPSREfficiency(data) {
+      let totalEfficiency = 0;
+      this.PSRefficiency = 0;
       for (let dataMonth in data.overall) {
-        PODeclineSeries.push(
-          data.overall[dataMonth].total_po_decline == null
+        totalEfficiency +=
+          data.overall[dataMonth].psr_efficiency == null
             ? 0
-            : parseInt(data.overall[dataMonth].total_po_decline)
-        );
+            : parseInt(data.overall[dataMonth].psr_efficiency);
       }
-      this.totalPODeclineChart.data.series.push(PODeclineSeries);
+      this.PSRefficiency = (totalEfficiency / 12).toFixed(2);
     },
-    async getPendingOneseries(data) {
-      this.pendingOneChart.data.series.pop();
+
+    async getTotalDeclinePSR(data) {
+      this.totalDeclinePSR = 0;
+      for (let dataMonth in data.overall) {
+        this.totalDeclinePSR +=
+          data.overall[dataMonth].total_psr_decline == null
+            ? 0
+            : parseInt(data.overall[dataMonth].total_psr_decline);
+      }
+    },
+
+    async getPOPendingOneseries(data) {
+      this.POpendingOneChart.data.series.pop();
       let series = Array();
       for (let dataMonth in data.overall) {
         series.push(
@@ -602,10 +722,10 @@ export default {
             : parseInt(data.overall[dataMonth].tmp_average_po.pending_1.minutes)
         );
       }
-      this.pendingOneChart.data.series.push(series);
+      this.POpendingOneChart.data.series.push(series);
     },
-    async getPendingTwoseries(data) {
-      this.pendingTwoChart.data.series.pop();
+    async getPOPendingTwoseries(data) {
+      this.POpendingTwoChart.data.series.pop();
       let series = Array();
       for (let dataMonth in data.overall) {
         series.push(
@@ -614,10 +734,10 @@ export default {
             : parseInt(data.overall[dataMonth].tmp_average_po.pending_2.minutes)
         );
       }
-      this.pendingTwoChart.data.series.push(series);
+      this.POpendingTwoChart.data.series.push(series);
     },
-    async getApprovalseries(data) {
-      this.approvalChart.data.series.pop();
+    async getPOApprovalseries(data) {
+      this.POapprovalChart.data.series.pop();
       let series = Array();
       for (let dataMonth in data.overall) {
         series.push(
@@ -626,10 +746,10 @@ export default {
             : parseInt(data.overall[dataMonth].tmp_average_po.approve.minutes)
         );
       }
-      this.approvalChart.data.series.push(series);
+      this.POapprovalChart.data.series.push(series);
     },
-    async getDeclineseries(data) {
-      this.dataDeclineChart.data.series.pop();
+    async getPODeclineseries(data) {
+      this.POdataDeclineChart.data.series.pop();
       let series = Array();
       for (let dataMonth in data.overall) {
         series.push(
@@ -638,22 +758,79 @@ export default {
             : parseInt(data.overall[dataMonth].tmp_average_po.decline.minutes)
         );
       }
-      this.dataDeclineChart.data.series.push(series);
+      this.POdataDeclineChart.data.series.push(series);
+      console.log(series);
+    },
+    async getPSRPendingOneseries(data) {
+      this.PSRpendingOneChart.data.series.pop();
+      let series = Array();
+      for (let dataMonth in data.overall) {
+        series.push(
+          data.overall[dataMonth].tmp_average_psr.pending_1.minutes == null
+            ? 0
+            : parseInt(data.overall[dataMonth].tmp_average_psr.pending_1.minutes)
+        );
+      }
+      this.PSRpendingOneChart.data.series.push(series);
+    },
+    async getPSRPendingTwoseries(data) {
+      this.PSRpendingTwoChart.data.series.pop();
+      let series = Array();
+      for (let dataMonth in data.overall) {
+        series.push(
+          data.overall[dataMonth].tmp_average_psr.pending_2.minutes == null
+            ? 0
+            : parseInt(data.overall[dataMonth].tmp_average_psr.pending_2.minutes)
+        );
+      }
+      this.PSRpendingTwoChart.data.series.push(series);
+    },
+    async getPSRApprovalseries(data) {
+      this.PSRapprovalChart.data.series.pop();
+      let series = Array();
+      for (let dataMonth in data.overall) {
+        series.push(
+          data.overall[dataMonth].tmp_average_psr.approve.minutes == null
+            ? 0
+            : parseInt(data.overall[dataMonth].tmp_average_psr.approve.minutes)
+        );
+      }
+      this.PSRapprovalChart.data.series.push(series);
+    },
+    async getPSRDeclineseries(data) {
+      this.PSRdataDeclineChart.data.series.pop();
+      let series = Array();
+      for (let dataMonth in data.overall) {
+        series.push(
+          data.overall[dataMonth].tmp_average_psr.decline.minutes == null
+            ? 0
+            : parseInt(data.overall[dataMonth].tmp_average_psr.decline.minutes)
+        );
+      }
+      this.PSRdataDeclineChart.data.series.push(series);
+      console.log(series);
     },
     forceRender() {
       this.componentKey += 1;
     },
     async getAllData(data) {
       await this.getTotalPO(data);
-      await this.getEfficiency(data);
+      await this.getPOEfficiency(data);
       await this.getTotalDeclinePO(data);
-      await this.getTotalPOseries(data);
-      await this.getTotalPODeclineSeries(data);
-      await this.getPendingOneseries(data);
-      await this.getPendingTwoseries(data);
-      await this.getApprovalseries(data);
-      await this.getDeclineseries(data);
-    }
+      await this.getTotalPSR(data);
+      await this.getPSREfficiency(data);
+      await this.getTotalDeclinePSR(data);
+
+      await this.getPOApprovalseries(data);
+      await this.getPODeclineseries(data);
+      await this.getPOPendingOneseries(data);
+      await this.getPOPendingTwoseries(data);
+
+      await this.getPSRApprovalseries(data);
+      await this.getPSRDeclineseries(data);
+      await this.getPSRPendingOneseries(data);
+      await this.getPSRPendingTwoseries(data);
+    },
   },
 };
 </script>
