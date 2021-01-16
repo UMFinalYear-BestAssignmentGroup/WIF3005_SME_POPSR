@@ -350,7 +350,7 @@ export default {
             tension: 0,
           }),
           low: 0,
-          high: 100, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
+          high: 250, 
           chartPadding: {
             top: 0,
             right: 0,
@@ -382,7 +382,7 @@ export default {
             tension: 0,
           }),
           low: 0,
-          high: 100, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
+          high: 250, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
           chartPadding: {
             top: 0,
             right: 0,
@@ -414,7 +414,7 @@ export default {
             showGrid: false,
           },
           low: 0,
-          high: 150,
+          high: 250,
           chartPadding: {
             top: 0,
             right: 5,
@@ -460,7 +460,7 @@ export default {
             tension: 0,
           }),
           low: 0,
-          high: 150, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
+          high: 250, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
           chartPadding: {
             top: 0,
             right: 0,
@@ -492,7 +492,7 @@ export default {
             tension: 0,
           }),
           low: 0,
-          high: 240, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
+          high: 250, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
           chartPadding: {
             top: 0,
             right: 0,
@@ -524,7 +524,7 @@ export default {
             tension: 0,
           }),
           low: 0,
-          high: 240, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
+          high: 250, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
           chartPadding: {
             top: 0,
             right: 0,
@@ -556,7 +556,7 @@ export default {
             showGrid: false,
           },
           low: 0,
-          high: 240,
+          high: 250,
           chartPadding: {
             top: 0,
             right: 5,
@@ -602,7 +602,7 @@ export default {
             tension: 0,
           }),
           low: 0,
-          high: 240, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
+          high: 250, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
           chartPadding: {
             top: 0,
             right: 0,
@@ -620,7 +620,6 @@ export default {
       this.performanceData = data;
       this.getAllData(this.performanceData);
       this.isLoading = false;
-      this.forceRender();
     } catch (err) {
       this.isLoading = false;
       this.error = err.message;
@@ -641,7 +640,6 @@ export default {
           this.performanceData = await performance.get_performance(this.year);
           this.getAllData(this.performanceData);
           this.isLoading = false;
-          this.forceRender();
         } catch (err) {
           this.isLoading = false;
           alert(err);
@@ -722,7 +720,9 @@ export default {
             : parseInt(data.overall[dataMonth].tmp_average_po.pending_1.minutes)
         );
       }
+      this.POpendingOneChart.options.high = Math.max.apply(Math, series) + 50;
       this.POpendingOneChart.data.series.push(series);
+      this.forceRender();
     },
     async getPOPendingTwoseries(data) {
       this.POpendingTwoChart.data.series.pop();
@@ -735,6 +735,8 @@ export default {
         );
       }
       this.POpendingTwoChart.data.series.push(series);
+      this.POpendingTwoChart.options.high = Math.max.apply(Math, series) + 50;
+      this.forceRender();
     },
     async getPOApprovalseries(data) {
       this.POapprovalChart.data.series.pop();
@@ -747,6 +749,8 @@ export default {
         );
       }
       this.POapprovalChart.data.series.push(series);
+      this.POapprovalChart.options.high = Math.max.apply(Math, series) + 50;
+      this.forceRender();
     },
     async getPODeclineseries(data) {
       this.POdataDeclineChart.data.series.pop();
@@ -759,7 +763,8 @@ export default {
         );
       }
       this.POdataDeclineChart.data.series.push(series);
-      console.log(series);
+      this.POdataDeclineChart.options.high = Math.max.apply(Math, series) + 50;
+      this.forceRender();
     },
     async getPSRPendingOneseries(data) {
       this.PSRpendingOneChart.data.series.pop();
@@ -772,6 +777,8 @@ export default {
         );
       }
       this.PSRpendingOneChart.data.series.push(series);
+      this.PSRpendingOneChart.options.high = Math.max.apply(Math, series) + 50;
+      this.forceRender();
     },
     async getPSRPendingTwoseries(data) {
       this.PSRpendingTwoChart.data.series.pop();
@@ -784,6 +791,8 @@ export default {
         );
       }
       this.PSRpendingTwoChart.data.series.push(series);
+      this.PSRpendingTwoChart.options.high = Math.max.apply(Math, series) + 50;
+      this.forceRender();
     },
     async getPSRApprovalseries(data) {
       this.PSRapprovalChart.data.series.pop();
@@ -796,6 +805,8 @@ export default {
         );
       }
       this.PSRapprovalChart.data.series.push(series);
+      this.PSRapprovalChart.options.high = Math.max.apply(Math, series) + 50;
+      this.forceRender();
     },
     async getPSRDeclineseries(data) {
       this.PSRdataDeclineChart.data.series.pop();
@@ -808,7 +819,8 @@ export default {
         );
       }
       this.PSRdataDeclineChart.data.series.push(series);
-      console.log(series);
+      this.PSRdataDeclineChart.options.high = Math.max.apply(Math, series) + 50;
+      this.forceRender();
     },
     forceRender() {
       this.componentKey += 1;
