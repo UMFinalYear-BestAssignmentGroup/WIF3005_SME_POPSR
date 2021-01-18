@@ -42,7 +42,7 @@
           <template slot="footer">
             <div class="stats">
               <md-icon>date_range</md-icon>
-              {{ year }}
+              {{ new Date().toLocaleString() }}
             </div>
           </template>
         </stats-card>
@@ -63,7 +63,7 @@
           <template slot="footer">
             <div class="stats">
               <md-icon>date_range</md-icon>
-              {{ year }}
+              {{ new Date().toLocaleString() }}
             </div>
           </template>
         </stats-card>
@@ -86,7 +86,7 @@
           <template slot="footer">
             <div class="stats">
               <md-icon>date_range</md-icon>
-              {{ year }}
+              {{ new Date().toLocaleString() }}
             </div>
           </template>
         </stats-card>
@@ -107,7 +107,7 @@
           <template slot="footer">
             <div class="stats">
               <md-icon>date_range</md-icon>
-              {{ year }}
+              {{ new Date().toLocaleString() }}
             </div>
           </template>
         </stats-card>
