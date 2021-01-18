@@ -4,7 +4,7 @@ CREATE OR REPLACE FUNCTION public.F_GET_PERF_PO(
     RETURNS TABLE(
 	totalrecords INTEGER,
 	age_time_pending_1 INTERVAL,
-    age_age_time_pending_2 INTERVAL,
+    age_time_pending_2 INTERVAL,
     age_time_approve INTERVAL,
     age_time_decline INTERVAL,
     time_created TIMESTAMP WITH TIME ZONE,
