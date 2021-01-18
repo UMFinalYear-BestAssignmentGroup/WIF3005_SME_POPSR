@@ -83,7 +83,6 @@ export default {
   components: {
     TopNavbar,
     DashboardContent,
-    ContentFooter,
     MobileMenu
   }
 };

@@ -299,66 +299,12 @@
           </template>
         </chart-card>
       </div>
-      <div
-        class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-100"
-      >
-        <md-card>
-          <md-card-header data-background-color="orange">
-            <h4 class="title">Employees Stats</h4>
-            <p class="category">Employees in this company</p>
-          </md-card-header>
-          <md-card-content>
-            <b-loading
-          :is-full-page="false"
-          :active.sync="isLoading"
-          :can-cancel="true"
-        ></b-loading>
-        <b-table
-          :data="isEmpty ? [] : users"
-          :striped="true"
-          :hoverable="true"
-          :paginated="true"
-          :per-page="10"
-          aria-next-label="Next page"
-          aria-previous-label="Previous page"
-          aria-page-label="Page"
-          aria-current-label="Current page"
-          :pagination-simple="false"
-        >
-          <template slot-scope="props">
-            <b-table-column field="id" label="Username" width="300" sortable="">
-              <a @click="detail(props.row)">
-                {{ props.row.username }}
-              </a>
-            </b-table-column>
-            <b-table-column field="id" label="Firstname" width="300" sortable="">
-              {{ props.row.firstname }}
-            </b-table-column>
-            <b-table-column field="id" label="Lastname" width="300" sortable="">
-              {{ props.row.lastname }}
-            </b-table-column>
-            <b-table-column field="id" label="Designation" width="300" sortable="">
-              <span v-if="props.row.t1 == true">Level 1</span>
-              <span v-else-if="props.row.t2 == true">Level 2</span>
-              <span v-else-if="props.row.t3 == true">Level 3</span>
-              <span v-else-if="props.row.t4 == true">Level 4</span>
-              <span v-else-if="props.row.is_admin == true">Admin</span>
-              <span v-else-if="props.row.acct_t == true"
-                >Account Department</span>
-              <span v-else>Invalid User</span>
-            </b-table-column>
-          </template>
-        </b-table>
-          </md-card-content>
-        </md-card>
-      </div>
     </div>
   </div>
 </template>
 
 <script>
 import performance from "@/js/performance.js";
-import admin from "@/js/admin.js";
 import { required } from "vuelidate/lib/validators";
 import {
   StatsCard,
@@ -377,7 +323,6 @@ export default {
       id: localStorage.id,
       year: 2021,
       performanceData: [],
-      users: [],
       totalPO: 0,
       totalPSR: 0,
       POefficiency: 0,
@@ -680,8 +625,6 @@ export default {
       const data = await performance.get_performance(this.year);
       this.performanceData = data;
       this.getAllData(this.performanceData);
-      const user = await admin.get_all_user();
-      this.users = user;
       this.isLoading = false;
     } catch (err) {
       this.isLoading = false;
@@ -694,6 +637,12 @@ export default {
     },
   },
   methods: {
+      detail(value) {
+      console.log(value.id);
+      this.$router.push({
+        path: `/userPerformance/${this.id}`
+      });
+    },
     async filter_year() {
       this.isPosted = true;
       if (!this.$v.$invalid) {
@@ -712,11 +661,11 @@ export default {
     },
     async getTotalPO(data) {
       this.totalPO = 0;
-      for (let dataMonth in data.overall) {
+      for (let dataMonth in data.user) {
         this.totalPO +=
-          data.overall[dataMonth].total_po == null
+          data.user[dataMonth].total_po == null
             ? 0
-            : parseInt(data.overall[dataMonth].total_po);
+            : parseInt(data.user[dataMonth].total_po);
       }
     },
 
@@ -724,12 +673,12 @@ export default {
       let totalEfficiency = 0;
       this.POefficiency = 0;
       let monthCount = 0;
-      for (let dataMonth in data.overall) {
+      for (let dataMonth in data.user) {
         totalEfficiency +=
-          data.overall[dataMonth].po_efficiency == null
+          data.user[dataMonth].po_efficiency == null
             ? 0
-            : parseInt(data.overall[dataMonth].po_efficiency);
-        if (data.overall[dataMonth].po_efficiency != null) {
+            : parseInt(data.user[dataMonth].po_efficiency);
+        if (data.user[dataMonth].po_efficiency != null) {
           monthCount += 1;
         }
       }
@@ -738,20 +687,20 @@ export default {
 
     async getTotalDeclinePO(data) {
       this.totalDeclinePO = 0;
-      for (let dataMonth in data.overall) {
+      for (let dataMonth in data.user) {
         this.totalDeclinePO +=
-          data.overall[dataMonth].total_po_decline == null
+          data.user[dataMonth].total_po_decline == null
             ? 0
-            : parseInt(data.overall[dataMonth].total_po_decline);
+            : parseInt(data.user[dataMonth].total_po_decline);
       }
     },
     async getTotalPSR(data) {
       this.totalPSR = 0;
-      for (let dataMonth in data.overall) {
+      for (let dataMonth in data.user) {
         this.totalPSR +=
-          data.overall[dataMonth].total_psr == null
+          data.user[dataMonth].total_psr == null
             ? 0
-            : parseInt(data.overall[dataMonth].total_psr);
+            : parseInt(data.user[dataMonth].total_psr);
       }
     },
 
@@ -759,12 +708,12 @@ export default {
       let totalEfficiency = 0;
       this.PSRefficiency = 0;
       let monthCount = 0;
-      for (let dataMonth in data.overall) {
+      for (let dataMonth in data.user) {
         totalEfficiency +=
-          data.overall[dataMonth].psr_efficiency == null
+          data.user[dataMonth].psr_efficiency == null
             ? 0
-            : parseInt(data.overall[dataMonth].psr_efficiency);
-        if (data.overall[dataMonth].psr_efficiency != null) {
+            : parseInt(data.user[dataMonth].psr_efficiency);
+        if (data.user[dataMonth].psr_efficiency != null) {
           monthCount += 1;
         }
       }
@@ -773,22 +722,22 @@ export default {
 
     async getTotalDeclinePSR(data) {
       this.totalDeclinePSR = 0;
-      for (let dataMonth in data.overall) {
+      for (let dataMonth in data.user) {
         this.totalDeclinePSR +=
-          data.overall[dataMonth].total_psr_decline == null
+          data.user[dataMonth].total_psr_decline == null
             ? 0
-            : parseInt(data.overall[dataMonth].total_psr_decline);
+            : parseInt(data.user[dataMonth].total_psr_decline);
       }
     },
 
     async getPOPendingOneseries(data) {
       this.POpendingOneChart.data.series.pop();
       let series = Array();
-      for (let dataMonth in data.overall) {
+      for (let dataMonth in data.user) {
         series.push(
-          data.overall[dataMonth].tmp_average_po.pending_1.minutes == null
+          data.user[dataMonth].tmp_average_po.pending_1.minutes == null
             ? 0
-            : parseInt(data.overall[dataMonth].tmp_average_po.pending_1.minutes)
+            : parseInt(data.user[dataMonth].tmp_average_po.pending_1.minutes)
         );
       }
       this.POpendingOneChart.options.high = Math.max.apply(Math, series) + 50;
@@ -798,11 +747,11 @@ export default {
     async getPOPendingTwoseries(data) {
       this.POpendingTwoChart.data.series.pop();
       let series = Array();
-      for (let dataMonth in data.overall) {
+      for (let dataMonth in data.user) {
         series.push(
-          data.overall[dataMonth].tmp_average_po.pending_2.minutes == null
+          data.user[dataMonth].tmp_average_po.pending_2.minutes == null
             ? 0
-            : parseInt(data.overall[dataMonth].tmp_average_po.pending_2.minutes)
+            : parseInt(data.user[dataMonth].tmp_average_po.pending_2.minutes)
         );
       }
       this.POpendingTwoChart.data.series.push(series);
@@ -812,11 +761,11 @@ export default {
     async getPOApprovalseries(data) {
       this.POapprovalChart.data.series.pop();
       let series = Array();
-      for (let dataMonth in data.overall) {
+      for (let dataMonth in data.user) {
         series.push(
-          data.overall[dataMonth].tmp_average_po.approve.minutes == null
+          data.user[dataMonth].tmp_average_po.approve.minutes == null
             ? 0
-            : parseInt(data.overall[dataMonth].tmp_average_po.approve.minutes)
+            : parseInt(data.user[dataMonth].tmp_average_po.approve.minutes)
         );
       }
       this.POapprovalChart.data.series.push(series);
@@ -826,11 +775,11 @@ export default {
     async getPODeclineseries(data) {
       this.POdataDeclineChart.data.series.pop();
       let series = Array();
-      for (let dataMonth in data.overall) {
+      for (let dataMonth in data.user) {
         series.push(
-          data.overall[dataMonth].tmp_average_po.decline.minutes == null
+          data.user[dataMonth].tmp_average_po.decline.minutes == null
             ? 0
-            : parseInt(data.overall[dataMonth].tmp_average_po.decline.minutes)
+            : parseInt(data.user[dataMonth].tmp_average_po.decline.minutes)
         );
       }
       this.POdataDeclineChart.data.series.push(series);
@@ -840,12 +789,12 @@ export default {
     async getPSRPendingOneseries(data) {
       this.PSRpendingOneChart.data.series.pop();
       let series = Array();
-      for (let dataMonth in data.overall) {
+      for (let dataMonth in data.user) {
         series.push(
-          data.overall[dataMonth].tmp_average_psr.pending_1.minutes == null
+          data.user[dataMonth].tmp_average_psr.pending_1.minutes == null
             ? 0
             : parseInt(
-                data.overall[dataMonth].tmp_average_psr.pending_1.minutes
+                data.user[dataMonth].tmp_average_psr.pending_1.minutes
               )
         );
       }
@@ -856,12 +805,12 @@ export default {
     async getPSRPendingTwoseries(data) {
       this.PSRpendingTwoChart.data.series.pop();
       let series = Array();
-      for (let dataMonth in data.overall) {
+      for (let dataMonth in data.user) {
         series.push(
-          data.overall[dataMonth].tmp_average_psr.pending_2.minutes == null
+          data.user[dataMonth].tmp_average_psr.pending_2.minutes == null
             ? 0
             : parseInt(
-                data.overall[dataMonth].tmp_average_psr.pending_2.minutes
+                data.user[dataMonth].tmp_average_psr.pending_2.minutes
               )
         );
       }
@@ -872,11 +821,11 @@ export default {
     async getPSRApprovalseries(data) {
       this.PSRapprovalChart.data.series.pop();
       let series = Array();
-      for (let dataMonth in data.overall) {
+      for (let dataMonth in data.user) {
         series.push(
-          data.overall[dataMonth].tmp_average_psr.approve.minutes == null
+          data.user[dataMonth].tmp_average_psr.approve.minutes == null
             ? 0
-            : parseInt(data.overall[dataMonth].tmp_average_psr.approve.minutes)
+            : parseInt(data.user[dataMonth].tmp_average_psr.approve.minutes)
         );
       }
       this.PSRapprovalChart.data.series.push(series);
@@ -886,11 +835,11 @@ export default {
     async getPSRDeclineseries(data) {
       this.PSRdataDeclineChart.data.series.pop();
       let series = Array();
-      for (let dataMonth in data.overall) {
+      for (let dataMonth in data.user) {
         series.push(
-          data.overall[dataMonth].tmp_average_psr.decline.minutes == null
+          data.user[dataMonth].tmp_average_psr.decline.minutes == null
             ? 0
-            : parseInt(data.overall[dataMonth].tmp_average_psr.decline.minutes)
+            : parseInt(data.user[dataMonth].tmp_average_psr.decline.minutes)
         );
       }
       this.PSRdataDeclineChart.data.series.push(series);
@@ -917,56 +866,6 @@ export default {
       await this.getPSRDeclineseries(data);
       await this.getPSRPendingOneseries(data);
       await this.getPSRPendingTwoseries(data);
-    },
-    async getUser(){
-
-    },
-    detail(value) {
-      console.log(value.id);
-      this.$router.push({
-        path: `/userPerformance/${this.id}/${value.id}`
-      });
-    },
-    openLoading() {
-      this.isLoading = true;
-      setTimeout(() => {
-        this.isLoading = false;
-      }, 10 * 1000);
-    },
-    async nextPage() {
-      this.isPrevious = false;
-      if (this.page >= this.total_page - 1) {
-        this.page = this.total_page;
-      } else this.page += 1;
-      if (this.page == this.total_page) 
-        this.isNext = true;
-      
-      this.poObj.in_page = this.page;
-      this.getUser();
-    },
-    async previousPage() {
-      this.isNext = false;
-      if (this.page <= 1) {
-        this.page = 1;
-        this.isPrevious = true;
-      } else this.page -= 1;
-      if (this.page == 1) this.isPrevious = true;
-            
-      this.poObj.in_page = this.page;
-      this.getUser();
-    },
-    async pagination() {
-      if (this.page >= this.total_page) {
-        this.page = this.total_page;
-        this.isNext = false;
-      } else if (this.page < 1) {
-        this.page = 1;
-        this.isPrevious = false;
-      } else this.page = 1;
-            
-      this.poObj.in_page = this.page;
-      this.getUser();
     }
-  },
 };
 </script>
