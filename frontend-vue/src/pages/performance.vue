@@ -57,7 +57,7 @@
 
           <template slot="content">
             <p class="category">Efficiency for PO Approval</p>
-            <h3 class="title">{{ POefficiency }}</h3>
+            <h3 class="title">{{ POefficiency }}%</h3>
           </template>
 
           <template slot="footer">
@@ -101,7 +101,7 @@
 
           <template slot="content">
             <p class="category">Efficiency for PSR Approval</p>
-            <h3 class="title">{{ PSRefficiency }}</h3>
+            <h3 class="title">{{ PSRefficiency }}%</h3>
           </template>
 
           <template slot="footer">
