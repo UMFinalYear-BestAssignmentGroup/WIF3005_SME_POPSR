@@ -660,13 +660,17 @@ export default {
     async getPOEfficiency(data) {
       let totalEfficiency = 0;
       this.POefficiency = 0;
+      let monthCount = 0;
       for (let dataMonth in data.overall) {
         totalEfficiency +=
           data.overall[dataMonth].po_efficiency == null
             ? 0
             : parseInt(data.overall[dataMonth].po_efficiency);
+            if(data.overall[dataMonth].po_efficiency != null){
+              monthCount+=1;
+            }
       }
-      this.POefficiency = (totalEfficiency / 12).toFixed(2);
+      this.POefficiency = (totalEfficiency / monthCount).toFixed(2);
     },
 
     async getTotalDeclinePO(data) {
@@ -691,13 +695,17 @@ export default {
     async getPSREfficiency(data) {
       let totalEfficiency = 0;
       this.PSRefficiency = 0;
+      let monthCount = 0;
       for (let dataMonth in data.overall) {
         totalEfficiency +=
           data.overall[dataMonth].psr_efficiency == null
             ? 0
             : parseInt(data.overall[dataMonth].psr_efficiency);
+            if(data.overall[dataMonth].psr_efficiency != null){
+              monthCount+=1;
+            }
       }
-      this.PSRefficiency = (totalEfficiency / 12).toFixed(2);
+      this.PSRefficiency = (totalEfficiency / monthCount).toFixed(2);
     },
 
     async getTotalDeclinePSR(data) {
