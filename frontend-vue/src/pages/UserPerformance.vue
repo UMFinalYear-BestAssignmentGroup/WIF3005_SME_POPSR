@@ -4,7 +4,9 @@
       <div
         class="md-layout-item md-medium-size-90 md-xsmall-size-90 md-size-90"
       >
-        <h1 style="margin-left: 10px">{{ userName }} {{ userTier }}</h1>
+      <router-link style="margin-left: 10px;font-size: 18px; font-weight:400" to="/Performance/id: this.id">Dashboard</router-link>
+      <span style="font-size: 18px; font-weight:400"> / {{ userName }} {{ userTier }}</span>
+        <h1 style="margin-left: 10px; font-size:35px">{{ userName }} {{ userTier }}</h1>
 
         <table cls="clsForm" width="80%:">
           <col width="15%" />
