@@ -4,7 +4,7 @@
       <div
         class="md-layout-item md-medium-size-90 md-xsmall-size-90 md-size-90"
       >
-        <h1 style="margin-left: 10px">{{ userName }} {{userTier}}</h1>
+        <h1 style="margin-left: 10px">{{ userName }} {{ userTier }}</h1>
 
         <table cls="clsForm" width="80%:">
           <col width="15%" />
@@ -28,6 +28,7 @@
           </tr>
         </table>
       </div>
+
       <div
         class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-25"
       >
@@ -49,6 +50,7 @@
           </template>
         </stats-card>
       </div>
+
       <div
         class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-25"
       >
@@ -114,193 +116,208 @@
           </template>
         </stats-card>
       </div>
-      <div
-        class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-50"
-      >
-        <chart-card
-          :chart-data="POapprovalChart.data"
-          :chart-options="POapprovalChart.options"
-          :chart-responsive-options="POapprovalChart.responsiveOptions"
-          :chart-type="'Bar'"
-          :key="componentKey"
-          data-background-color="red"
+      <template v-if="getTier === 't4'">
+        <div
+          class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-50"
         >
-          <template slot="content">
-            <h4 class="title">PO Approval Per Month</h4>
-            <p class="category">Time Taken for Final Approval (Min)</p>
-          </template>
+          <chart-card
+            :chart-data="POapprovalChart.data"
+            :chart-options="POapprovalChart.options"
+            :chart-responsive-options="POapprovalChart.responsiveOptions"
+            :chart-type="'Bar'"
+            :key="componentKey"
+            data-background-color="red"
+          >
+            <template slot="content">
+              <h4 class="title">PO Approval Per Month</h4>
+              <p class="category">Time Taken for Final Approval (Min)</p>
+            </template>
 
-          <template slot="footer">
-            <div class="stats">
-              <md-icon>access_time</md-icon>
-              {{ new Date().toLocaleString() }}
-            </div>
-          </template>
-        </chart-card>
-      </div>
-      <div
-        class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-50"
-      >
-        <chart-card
-          :chart-data="POdataDeclineChart.data"
-          :chart-options="POdataDeclineChart.options"
-          :chart-type="'Bar'"
-          :key="componentKey"
-          data-background-color="green"
+            <template slot="footer">
+              <div class="stats">
+                <md-icon>access_time</md-icon>
+                {{ new Date().toLocaleString() }}
+              </div>
+            </template>
+          </chart-card>
+        </div>
+      </template>
+      <template v-if="getTier === 't4'">
+        <div
+          class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-50"
         >
-          <template slot="content">
-            <h4 class="title">PO Decline Per Month</h4>
-            <p class="category">Time taken for Decline (Min)</p>
-          </template>
+          <chart-card
+            :chart-data="POdataDeclineChart.data"
+            :chart-options="POdataDeclineChart.options"
+            :chart-type="'Bar'"
+            :key="componentKey"
+            data-background-color="green"
+          >
+            <template slot="content">
+              <h4 class="title">PO Decline Per Month</h4>
+              <p class="category">Time taken for Decline (Min)</p>
+            </template>
 
-          <template slot="footer">
-            <div class="stats">
-              <md-icon>access_time</md-icon>
-              {{ new Date().toLocaleString() }}
-            </div>
-          </template>
-        </chart-card>
-      </div>
-      <div
-        class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-50"
-      >
-        <chart-card
-          :chart-data="POpendingOneChart.data"
-          :chart-options="POpendingOneChart.options"
-          :chart-type="'Line'"
-          :key="componentKey"
-          data-background-color="green"
+            <template slot="footer">
+              <div class="stats">
+                <md-icon>access_time</md-icon>
+                {{ new Date().toLocaleString() }}
+              </div>
+            </template>
+          </chart-card>
+        </div>
+      </template>
+      <template v-if="getTier === 't2'">
+        <div
+          class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-50"
         >
-          <template slot="content">
-            <h4 class="title">PO Pending 1</h4>
-            <p class="category">Time taken for First Approval (Min)</p>
-          </template>
+          <chart-card
+            :chart-data="POpendingOneChart.data"
+            :chart-options="POpendingOneChart.options"
+            :chart-type="'Line'"
+            :key="componentKey"
+            data-background-color="green"
+          >
+            <template slot="content">
+              <h4 class="title">PO Pending 1</h4>
+              <p class="category">Time taken for First Approval (Min)</p>
+            </template>
 
-          <template slot="footer">
-            <div class="stats">
-              <md-icon>access_time</md-icon>
-              {{ new Date().toLocaleString() }}
-            </div>
-          </template>
-        </chart-card>
-      </div>
-      <div
-        class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-50"
-      >
-        <chart-card
-          :chart-data="POpendingTwoChart.data"
-          :chart-options="POpendingTwoChart.options"
-          :chart-type="'Line'"
-          :key="componentKey"
-          data-background-color="blue"
+            <template slot="footer">
+              <div class="stats">
+                <md-icon>access_time</md-icon>
+                {{ new Date().toLocaleString() }}
+              </div>
+            </template>
+          </chart-card>
+        </div>
+      </template>
+      <template v-if="getTier === 't3'">
+        <div
+          class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-50"
         >
-          <template slot="content">
-            <h4 class="title">PO Pending 2</h4>
-            <p class="category">Time taken for Second Approval (Min)</p>
-          </template>
+          <chart-card
+            :chart-data="POpendingTwoChart.data"
+            :chart-options="POpendingTwoChart.options"
+            :chart-type="'Line'"
+            :key="componentKey"
+            data-background-color="blue"
+          >
+            <template slot="content">
+              <h4 class="title">PO Pending 2</h4>
+              <p class="category">Time taken for Second Approval (Min)</p>
+            </template>
 
-          <template slot="footer">
-            <div class="stats">
-              <md-icon>access_time</md-icon>
-              {{ new Date().toLocaleString() }}
-            </div>
-          </template>
-        </chart-card>
-      </div>
-
-      <div
-        class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-50"
-      >
-        <chart-card
-          :chart-data="PSRapprovalChart.data"
-          :chart-options="PSRapprovalChart.options"
-          :chart-responsive-options="PSRapprovalChart.responsiveOptions"
-          :chart-type="'Bar'"
-          :key="componentKey"
-          data-background-color="red"
+            <template slot="footer">
+              <div class="stats">
+                <md-icon>access_time</md-icon>
+                {{ new Date().toLocaleString() }}
+              </div>
+            </template>
+          </chart-card>
+        </div>
+      </template>
+      <template v-if="getTier === 't4'">
+        <div
+          class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-50"
         >
-          <template slot="content">
-            <h4 class="title">PSR Approval Per Month</h4>
-            <p class="category">Time Taken for Final Approval (Min)</p>
-          </template>
+          <chart-card
+            :chart-data="PSRapprovalChart.data"
+            :chart-options="PSRapprovalChart.options"
+            :chart-responsive-options="PSRapprovalChart.responsiveOptions"
+            :chart-type="'Bar'"
+            :key="componentKey"
+            data-background-color="red"
+          >
+            <template slot="content">
+              <h4 class="title">PSR Approval Per Month</h4>
+              <p class="category">Time Taken for Final Approval (Min)</p>
+            </template>
 
-          <template slot="footer">
-            <div class="stats">
-              <md-icon>access_time</md-icon>
-              {{ new Date().toLocaleString() }}
-            </div>
-          </template>
-        </chart-card>
-      </div>
-      <div
-        class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-50"
-      >
-        <chart-card
-          :chart-data="PSRdataDeclineChart.data"
-          :chart-options="PSRdataDeclineChart.options"
-          :chart-type="'Bar'"
-          :key="componentKey"
-          data-background-color="green"
+            <template slot="footer">
+              <div class="stats">
+                <md-icon>access_time</md-icon>
+                {{ new Date().toLocaleString() }}
+              </div>
+            </template>
+          </chart-card>
+        </div>
+      </template>
+      <template v-if="getTier === 't4'">
+        <div
+          class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-50"
         >
-          <template slot="content">
-            <h4 class="title">PSR Decline Per Month</h4>
-            <p class="category">Time taken for Decline (Min)</p>
-          </template>
+          <chart-card
+            :chart-data="PSRdataDeclineChart.data"
+            :chart-options="PSRdataDeclineChart.options"
+            :chart-type="'Bar'"
+            :key="componentKey"
+            data-background-color="green"
+          >
+            <template slot="content">
+              <h4 class="title">PSR Decline Per Month</h4>
+              <p class="category">Time taken for Decline (Min)</p>
+            </template>
 
-          <template slot="footer">
-            <div class="stats">
-              <md-icon>access_time</md-icon>
-              {{ new Date().toLocaleString() }}
-            </div>
-          </template>
-        </chart-card>
-      </div>
-      <div
-        class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-50"
-      >
-        <chart-card
-          :chart-data="PSRpendingOneChart.data"
-          :chart-options="PSRpendingOneChart.options"
-          :chart-type="'Line'"
-          :key="componentKey"
-          data-background-color="green"
+            <template slot="footer">
+              <div class="stats">
+                <md-icon>access_time</md-icon>
+                {{ new Date().toLocaleString() }}
+              </div>
+            </template>
+          </chart-card>
+        </div>
+      </template>
+      <template v-if="getTier === 't2'">
+        <div
+          class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-50"
         >
-          <template slot="content">
-            <h4 class="title">PSR Pending 1</h4>
-            <p class="category">Time taken for First Approval (Min)</p>
-          </template>
+          <chart-card
+            :chart-data="PSRpendingOneChart.data"
+            :chart-options="PSRpendingOneChart.options"
+            :chart-type="'Line'"
+            :key="componentKey"
+            data-background-color="green"
+          >
+            <template slot="content">
+              <h4 class="title">PSR Pending 1</h4>
+              <p class="category">Time taken for First Approval (Min)</p>
+            </template>
 
-          <template slot="footer">
-            <div class="stats">
-              <md-icon>access_time</md-icon>
-              {{ new Date().toLocaleString() }}
-            </div>
-          </template>
-        </chart-card>
-      </div>
-      <div
-        class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-50"
-      >
-        <chart-card
-          :chart-data="PSRpendingTwoChart.data"
-          :chart-options="PSRpendingTwoChart.options"
-          :chart-type="'Line'"
-          :key="componentKey"
-          data-background-color="blue"
+            <template slot="footer">
+              <div class="stats">
+                <md-icon>access_time</md-icon>
+                {{ new Date().toLocaleString() }}
+              </div>
+            </template>
+          </chart-card>
+        </div>
+      </template>
+      <template v-if="getTier === 't3'">
+        <div
+          class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-50"
         >
-          <template slot="content">
-            <h4 class="title">PSR Pending 2</h4>
-            <p class="category">Time taken for Second Approval (Min)</p>
-          </template>
+          <chart-card
+            :chart-data="PSRpendingTwoChart.data"
+            :chart-options="PSRpendingTwoChart.options"
+            :chart-type="'Line'"
+            :key="componentKey"
+            data-background-color="blue"
+          >
+            <template slot="content">
+              <h4 class="title">PSR Pending 2</h4>
+              <p class="category">Time taken for Second Approval (Min)</p>
+            </template>
 
-          <template slot="footer">
-            <div class="stats">
-              <md-icon>access_time</md-icon>
-              {{ new Date().toLocaleString() }}
-            </div>
-          </template>
-        </chart-card>
-      </div>
+            <template slot="footer">
+              <div class="stats">
+                <md-icon>access_time</md-icon>
+                {{ new Date().toLocaleString() }}
+              </div>
+            </template>
+          </chart-card>
+        </div>
+      </template>
     </div>
   </div>
 </template>
@@ -324,6 +341,7 @@ export default {
       usersData: [],
       userName: "",
       userTier: "",
+      getTier: "",
       performanceData: [],
       totalPO: 0,
       totalPSR: 0,
@@ -654,18 +672,25 @@ export default {
           this.userName = data[user].lastname + " " + data[user].firstname;
           if (data[user].t1 == true) {
             this.userTier = "(Level 1)";
+            this.getTier = "t1";
           } else if (data[user].t2 == true) {
             this.userTier = "(Level 2)";
+            this.getTier = "t2";
           } else if (data[user].t3 == true) {
             this.userTier = "(Level 3)";
+            this.getTier = "t3";
           } else if (data[user].t4 == true) {
             this.userTier = "(Level 4)";
+            this.getTier = "t4";
           } else if (data[user].is_admin == true) {
             this.userTier = "(Admin)";
+            this.getTier = "admin";
           } else if (data[user].acct_t == true) {
             this.userTier = "(Account Department)";
+            this.getTier = "account";
           } else {
             this.userTier = "(Invalid User)";
+            this.getTier = "invalid";
           }
         }
       }
