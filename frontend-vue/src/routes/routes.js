@@ -32,6 +32,7 @@ import poListing from "@/pages/POListing.vue";
 import psrListing from "@/pages/PSRListing.vue";
 import passwordRecovery from "@/pages/passwordRecovery.vue";
 import performance from "@/pages/performance.vue";
+import userPerformance from "@/pages/userPerformance.vue";
 
 
 const routes = [{
@@ -58,6 +59,11 @@ const routes = [{
                 path: "/performance/:id",
                 name: "Performance",
                 component: performance
+            },
+            {
+                path: "/userPerformance/:id/:user_id",
+                name: "User Performance",
+                component: userPerformance
             },
             {
                 path: "/resetPassword/:id",

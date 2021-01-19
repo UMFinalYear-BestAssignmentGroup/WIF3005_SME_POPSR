@@ -622,8 +622,9 @@ export default {
   async created() {
     try {
       this.isLoading = true;
-      const data = await performance.get_performance(this.year);
+      const data = await performance.get_all_user_performance(this.year);
       this.performanceData = data;
+      console.log(data);
       this.getAllData(this.performanceData);
       this.isLoading = false;
     } catch (err) {
@@ -649,7 +650,7 @@ export default {
         try {
           this.performanceData = [];
           this.isLoading = true;
-          this.performanceData = await performance.get_performance(this.year);
+          this.performanceData = await performance.get_all_user_performance(this.year);
           this.getAllData(this.performanceData);
           this.isLoading = false;
         } catch (err) {
