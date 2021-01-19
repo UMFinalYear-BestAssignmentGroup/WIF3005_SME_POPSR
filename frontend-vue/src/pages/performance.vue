@@ -358,7 +358,6 @@
 
 <script>
 import performance from "@/js/performance.js";
-import admin from "@/js/admin.js";
 import { required } from "vuelidate/lib/validators";
 import {
   StatsCard,
@@ -680,8 +679,8 @@ export default {
       const data = await performance.get_performance(this.year);
       this.performanceData = data;
       this.getAllData(this.performanceData);
-      const user = await admin.get_all_user();
-      this.users = user;
+      const user = await performance.get_all_user_performance(this.year);
+      this.users = user.users;
       this.isLoading = false;
     } catch (err) {
       this.isLoading = false;
