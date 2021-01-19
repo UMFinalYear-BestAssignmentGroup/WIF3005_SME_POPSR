@@ -4,6 +4,8 @@
       <div
         class="md-layout-item md-medium-size-90 md-xsmall-size-90 md-size-90"
       >
+        <h1 style="margin-left: 10px">{{ userName }} {{userTier}}</h1>
+
         <table cls="clsForm" width="80%:">
           <col width="15%" />
           <col width="70%" />
@@ -320,6 +322,8 @@ export default {
       id: localStorage.id,
       year: 2021,
       usersData: [],
+      userName: "",
+      userTier: "",
       performanceData: [],
       totalPO: 0,
       totalPSR: 0,
@@ -647,6 +651,22 @@ export default {
       for (let user in data) {
         if (this.id == data[user].id) {
           this.performanceData = data[user].performance;
+          this.userName = data[user].lastname + " " + data[user].firstname;
+          if (data[user].t1 == true) {
+            this.userTier = "(Level 1)";
+          } else if (data[user].t2 == true) {
+            this.userTier = "(Level 2)";
+          } else if (data[user].t3 == true) {
+            this.userTier = "(Level 3)";
+          } else if (data[user].t4 == true) {
+            this.userTier = "(Level 4)";
+          } else if (data[user].is_admin == true) {
+            this.userTier = "(Admin)";
+          } else if (data[user].acct_t == true) {
+            this.userTier = "(Account Department)";
+          } else {
+            this.userTier = "(Invalid User)";
+          }
         }
       }
     },
