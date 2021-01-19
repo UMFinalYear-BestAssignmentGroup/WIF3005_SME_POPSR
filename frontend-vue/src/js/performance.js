@@ -19,6 +19,21 @@ class performance {
     });
   }
 
+  static get_all_user_performance(year) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const res = await axios.post(`${url}all`, {
+            year
+        },{
+          withCredentials: true
+        });
+        resolve(res.data);
+      } catch (err) {
+        reject(err);
+      }
+    });
+  }
+
 }
 
 export default performance;
