@@ -924,7 +924,7 @@ export default {
     detail(value) {
       console.log(value.id);
       this.$router.push({
-        path: `/userPerformance/${this.id}/${value.id}`
+        path: `/UserPerformance/${this.id}/${value.id}`
       });
     },
     openLoading() {

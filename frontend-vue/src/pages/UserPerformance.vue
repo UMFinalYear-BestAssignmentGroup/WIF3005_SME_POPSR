@@ -306,15 +306,12 @@
 <script>
 import performance from "@/js/performance.js";
 import { required } from "vuelidate/lib/validators";
-import {
-  StatsCard,
-  ChartCard
-} from "@/components";
+import { StatsCard, ChartCard } from "@/components";
 
 export default {
   components: {
     StatsCard,
-    ChartCard
+    ChartCard,
   },
   data() {
     return {
@@ -638,10 +635,10 @@ export default {
     },
   },
   methods: {
-      detail(value) {
+    detail(value) {
       console.log(value.id);
       this.$router.push({
-        path: `/userPerformance/${this.id}`
+        path: `/UserPerformance/${this.id}`,
       });
     },
     async filter_year() {
@@ -650,7 +647,9 @@ export default {
         try {
           this.performanceData = [];
           this.isLoading = true;
-          this.performanceData = await performance.get_all_user_performance(this.year);
+          this.performanceData = await performance.get_all_user_performance(
+            this.year
+          );
           this.getAllData(this.performanceData);
           this.isLoading = false;
         } catch (err) {
@@ -794,9 +793,7 @@ export default {
         series.push(
           data.user[dataMonth].tmp_average_psr.pending_1.minutes == null
             ? 0
-            : parseInt(
-                data.user[dataMonth].tmp_average_psr.pending_1.minutes
-              )
+            : parseInt(data.user[dataMonth].tmp_average_psr.pending_1.minutes)
         );
       }
       this.PSRpendingOneChart.data.series.push(series);
@@ -810,9 +807,7 @@ export default {
         series.push(
           data.user[dataMonth].tmp_average_psr.pending_2.minutes == null
             ? 0
-            : parseInt(
-                data.user[dataMonth].tmp_average_psr.pending_2.minutes
-              )
+            : parseInt(data.user[dataMonth].tmp_average_psr.pending_2.minutes)
         );
       }
       this.PSRpendingTwoChart.data.series.push(series);
@@ -867,6 +862,7 @@ export default {
       await this.getPSRDeclineseries(data);
       await this.getPSRPendingOneseries(data);
       await this.getPSRPendingTwoseries(data);
-    }
+    },
+  },
 };
 </script>
