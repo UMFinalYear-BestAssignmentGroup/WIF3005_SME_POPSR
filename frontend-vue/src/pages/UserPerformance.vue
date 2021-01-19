@@ -142,31 +142,7 @@
           </chart-card>
         </div>
       </template>
-      <template v-if="getTier === 't4'">
-        <div
-          class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-50"
-        >
-          <chart-card
-            :chart-data="POdataDeclineChart.data"
-            :chart-options="POdataDeclineChart.options"
-            :chart-type="'Bar'"
-            :key="componentKey"
-            data-background-color="green"
-          >
-            <template slot="content">
-              <h4 class="title">PO Decline Per Month</h4>
-              <p class="category">Time taken for Decline (Min)</p>
-            </template>
-
-            <template slot="footer">
-              <div class="stats">
-                <md-icon>access_time</md-icon>
-                {{ new Date().toLocaleString() }}
-              </div>
-            </template>
-          </chart-card>
-        </div>
-      </template>
+      
       <template v-if="getTier === 't2'">
         <div
           class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-50"
@@ -243,31 +219,7 @@
           </chart-card>
         </div>
       </template>
-      <template v-if="getTier === 't4'">
-        <div
-          class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-50"
-        >
-          <chart-card
-            :chart-data="PSRdataDeclineChart.data"
-            :chart-options="PSRdataDeclineChart.options"
-            :chart-type="'Bar'"
-            :key="componentKey"
-            data-background-color="green"
-          >
-            <template slot="content">
-              <h4 class="title">PSR Decline Per Month</h4>
-              <p class="category">Time taken for Decline (Min)</p>
-            </template>
-
-            <template slot="footer">
-              <div class="stats">
-                <md-icon>access_time</md-icon>
-                {{ new Date().toLocaleString() }}
-              </div>
-            </template>
-          </chart-card>
-        </div>
-      </template>
+      
       <template v-if="getTier === 't2'">
         <div
           class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-50"
@@ -462,39 +414,7 @@ export default {
           ],
         ],
       },
-      POdataDeclineChart: {
-        data: {
-          labels: [
-            "Jan",
-            "Feb",
-            "Mar",
-            "Apr",
-            "May",
-            "Jun",
-            "Jul",
-            "Aug",
-            "Sep",
-            "Oct",
-            "Nov",
-            "Dec",
-          ],
-          series: [],
-        },
 
-        options: {
-          lineSmooth: this.$Chartist.Interpolation.cardinal({
-            tension: 0,
-          }),
-          low: 0,
-          high: 250, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
-          chartPadding: {
-            top: 0,
-            right: 0,
-            bottom: 0,
-            left: 0,
-          },
-        },
-      },
       PSRpendingOneChart: {
         data: {
           labels: [
@@ -604,39 +524,7 @@ export default {
           ],
         ],
       },
-      PSRdataDeclineChart: {
-        data: {
-          labels: [
-            "Jan",
-            "Feb",
-            "Mar",
-            "Apr",
-            "May",
-            "Jun",
-            "Jul",
-            "Aug",
-            "Sep",
-            "Oct",
-            "Nov",
-            "Dec",
-          ],
-          series: [],
-        },
 
-        options: {
-          lineSmooth: this.$Chartist.Interpolation.cardinal({
-            tension: 0,
-          }),
-          low: 0,
-          high: 250, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
-          chartPadding: {
-            top: 0,
-            right: 0,
-            bottom: 0,
-            left: 0,
-          },
-        },
-      },
     };
   },
   async created() {
@@ -826,20 +714,7 @@ export default {
       this.POapprovalChart.options.high = Math.max.apply(Math, series) + 50;
       this.forceRender();
     },
-    async getPODeclineseries(data) {
-      this.POdataDeclineChart.data.series.pop();
-      let series = Array();
-      for (let dataMonth in data) {
-        series.push(
-          data[dataMonth].tmp_average_po.decline.minutes == null
-            ? 0
-            : parseInt(data[dataMonth].tmp_average_po.decline.minutes)
-        );
-      }
-      this.POdataDeclineChart.data.series.push(series);
-      this.POdataDeclineChart.options.high = Math.max.apply(Math, series) + 50;
-      this.forceRender();
-    },
+
     async getPSRPendingOneseries(data) {
       this.PSRpendingOneChart.data.series.pop();
       let series = Array();
@@ -882,20 +757,7 @@ export default {
       this.PSRapprovalChart.options.high = Math.max.apply(Math, series) + 50;
       this.forceRender();
     },
-    async getPSRDeclineseries(data) {
-      this.PSRdataDeclineChart.data.series.pop();
-      let series = Array();
-      for (let dataMonth in data) {
-        series.push(
-          data[dataMonth].tmp_average_psr.decline.minutes == null
-            ? 0
-            : parseInt(data[dataMonth].tmp_average_psr.decline.minutes)
-        );
-      }
-      this.PSRdataDeclineChart.data.series.push(series);
-      this.PSRdataDeclineChart.options.high = Math.max.apply(Math, series) + 50;
-      this.forceRender();
-    },
+
     forceRender() {
       this.componentKey += 1;
     },
@@ -908,12 +770,10 @@ export default {
       await this.getTotalDeclinePSR(data);
 
       await this.getPOApprovalseries(data);
-      await this.getPODeclineseries(data);
       await this.getPOPendingOneseries(data);
       await this.getPOPendingTwoseries(data);
 
       await this.getPSRApprovalseries(data);
-      await this.getPSRDeclineseries(data);
       await this.getPSRPendingOneseries(data);
       await this.getPSRPendingTwoseries(data);
     },
