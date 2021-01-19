@@ -147,6 +147,59 @@ exports.get_performance_overall = function (req, res, next) {
         })
 }
 
+exports.get_all_user_performance = async (req, res, next) => {
+    const getAllUsers = async (req, res, next) => {
+        return models.Users.findAll({
+            // attributes: ['username', 'firstname', 'lastname'],
+            include: [
+                {
+                    model: models.department,
+                    required: false,
+                    as: 'department',
+                    attributes: ['cd']
+                },
+                {
+                    model: models.branch,
+                    required: true,
+                    as: 'branch',
+                    attributes: ['cd']
+                }
+            ],
+            order: [
+                ['createdAt', 'DESC']
+            ]
+        }).then(user => {
+            res.status(200).send(user)
+        }).catch(err => {
+            winston.error({
+                level: 'error',
+                label: 'perf_get_all_user',
+                message: err
+            })
+            res.status(500).send(err);
+        })
+    }
+
+    let user_data = await getAllUsers();
+    console.log(user_data)
+
+    // const getPerf_PO_overall = (req, res, next) => {
+    //     return new Promise((resolve, reject) => {
+    //         return db.sequelize
+    //             .query('SELECT * from F_GET_PERF_PO(:a)', {
+    //                 replacements: {
+    //                     a: null
+    //                 }
+    //             })
+    //             .then(data => {
+    //                 resolve(data[0]);
+    //             }).catch(err => {
+    //                 reject(err);
+    //             });
+    //     })
+    // }
+}
+
 function calculateDeclines(data) {
     try {
         let tmp = 0;
