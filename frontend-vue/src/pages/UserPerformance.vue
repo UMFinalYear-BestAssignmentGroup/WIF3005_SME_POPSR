@@ -319,6 +319,7 @@ export default {
       isLoading: false,
       id: localStorage.id,
       year: 2021,
+      usersData: [],
       performanceData: [],
       totalPO: 0,
       totalPSR: 0,
@@ -619,9 +620,10 @@ export default {
   async created() {
     try {
       this.isLoading = true;
+      this.id = this.$route.params.user_id;
       const data = await performance.get_all_user_performance(this.year);
-      this.performanceData = data;
-      console.log(data);
+      this.usersData = data;
+      await this.get_performance_data(this.usersData);
       this.getAllData(this.performanceData);
       this.isLoading = false;
     } catch (err) {
@@ -641,15 +643,22 @@ export default {
         path: `/UserPerformance/${this.id}`,
       });
     },
+    async get_performance_data(data) {
+      for (let user in data) {
+        if (this.id == data[user].id) {
+          this.performanceData = data[user].performance;
+        }
+      }
+    },
     async filter_year() {
       this.isPosted = true;
       if (!this.$v.$invalid) {
         try {
           this.performanceData = [];
           this.isLoading = true;
-          this.performanceData = await performance.get_all_user_performance(
-            this.year
-          );
+          const data = await performance.get_all_user_performance(this.year);
+          this.usersData = data;
+          await this.get_performance_data(this.usersData);
           this.getAllData(this.performanceData);
           this.isLoading = false;
         } catch (err) {
@@ -661,11 +670,11 @@ export default {
     },
     async getTotalPO(data) {
       this.totalPO = 0;
-      for (let dataMonth in data.user) {
+      for (let dataMonth in data) {
         this.totalPO +=
-          data.user[dataMonth].total_po == null
+          data[dataMonth].total_po == null
             ? 0
-            : parseInt(data.user[dataMonth].total_po);
+            : parseInt(data[dataMonth].total_po);
       }
     },
 
@@ -673,12 +682,12 @@ export default {
       let totalEfficiency = 0;
       this.POefficiency = 0;
       let monthCount = 0;
-      for (let dataMonth in data.user) {
+      for (let dataMonth in data) {
         totalEfficiency +=
-          data.user[dataMonth].po_efficiency == null
+          data[dataMonth].po_efficiency == null
             ? 0
-            : parseInt(data.user[dataMonth].po_efficiency);
-        if (data.user[dataMonth].po_efficiency != null) {
+            : parseInt(data[dataMonth].po_efficiency);
+        if (data[dataMonth].po_efficiency != null) {
           monthCount += 1;
         }
       }
@@ -687,20 +696,20 @@ export default {
 
     async getTotalDeclinePO(data) {
       this.totalDeclinePO = 0;
-      for (let dataMonth in data.user) {
+      for (let dataMonth in data) {
         this.totalDeclinePO +=
-          data.user[dataMonth].total_po_decline == null
+          data[dataMonth].total_po_decline == null
             ? 0
-            : parseInt(data.user[dataMonth].total_po_decline);
+            : parseInt(data[dataMonth].total_po_decline);
       }
     },
     async getTotalPSR(data) {
       this.totalPSR = 0;
-      for (let dataMonth in data.user) {
+      for (let dataMonth in data) {
         this.totalPSR +=
-          data.user[dataMonth].total_psr == null
+          data[dataMonth].total_psr == null
             ? 0
-            : parseInt(data.user[dataMonth].total_psr);
+            : parseInt(data[dataMonth].total_psr);
       }
     },
 
@@ -708,12 +717,12 @@ export default {
       let totalEfficiency = 0;
       this.PSRefficiency = 0;
       let monthCount = 0;
-      for (let dataMonth in data.user) {
+      for (let dataMonth in data) {
         totalEfficiency +=
-          data.user[dataMonth].psr_efficiency == null
+          data[dataMonth].psr_efficiency == null
             ? 0
-            : parseInt(data.user[dataMonth].psr_efficiency);
-        if (data.user[dataMonth].psr_efficiency != null) {
+            : parseInt(data[dataMonth].psr_efficiency);
+        if (data[dataMonth].psr_efficiency != null) {
           monthCount += 1;
         }
       }
@@ -722,22 +731,22 @@ export default {
 
     async getTotalDeclinePSR(data) {
       this.totalDeclinePSR = 0;
-      for (let dataMonth in data.user) {
+      for (let dataMonth in data) {
         this.totalDeclinePSR +=
-          data.user[dataMonth].total_psr_decline == null
+          data[dataMonth].total_psr_decline == null
             ? 0
-            : parseInt(data.user[dataMonth].total_psr_decline);
+            : parseInt(data[dataMonth].total_psr_decline);
       }
     },
 
     async getPOPendingOneseries(data) {
       this.POpendingOneChart.data.series.pop();
       let series = Array();
-      for (let dataMonth in data.user) {
+      for (let dataMonth in data) {
         series.push(
-          data.user[dataMonth].tmp_average_po.pending_1.minutes == null
+          data[dataMonth].tmp_average_po.pending_1.minutes == null
             ? 0
-            : parseInt(data.user[dataMonth].tmp_average_po.pending_1.minutes)
+            : parseInt(data[dataMonth].tmp_average_po.pending_1.minutes)
         );
       }
       this.POpendingOneChart.options.high = Math.max.apply(Math, series) + 50;
@@ -747,11 +756,11 @@ export default {
     async getPOPendingTwoseries(data) {
       this.POpendingTwoChart.data.series.pop();
       let series = Array();
-      for (let dataMonth in data.user) {
+      for (let dataMonth in data) {
         series.push(
-          data.user[dataMonth].tmp_average_po.pending_2.minutes == null
+          data[dataMonth].tmp_average_po.pending_2.minutes == null
             ? 0
-            : parseInt(data.user[dataMonth].tmp_average_po.pending_2.minutes)
+            : parseInt(data[dataMonth].tmp_average_po.pending_2.minutes)
         );
       }
       this.POpendingTwoChart.data.series.push(series);
@@ -761,11 +770,11 @@ export default {
     async getPOApprovalseries(data) {
       this.POapprovalChart.data.series.pop();
       let series = Array();
-      for (let dataMonth in data.user) {
+      for (let dataMonth in data) {
         series.push(
-          data.user[dataMonth].tmp_average_po.approve.minutes == null
+          data[dataMonth].tmp_average_po.approve.minutes == null
             ? 0
-            : parseInt(data.user[dataMonth].tmp_average_po.approve.minutes)
+            : parseInt(data[dataMonth].tmp_average_po.approve.minutes)
         );
       }
       this.POapprovalChart.data.series.push(series);
@@ -775,11 +784,11 @@ export default {
     async getPODeclineseries(data) {
       this.POdataDeclineChart.data.series.pop();
       let series = Array();
-      for (let dataMonth in data.user) {
+      for (let dataMonth in data) {
         series.push(
-          data.user[dataMonth].tmp_average_po.decline.minutes == null
+          data[dataMonth].tmp_average_po.decline.minutes == null
             ? 0
-            : parseInt(data.user[dataMonth].tmp_average_po.decline.minutes)
+            : parseInt(data[dataMonth].tmp_average_po.decline.minutes)
         );
       }
       this.POdataDeclineChart.data.series.push(series);
@@ -789,11 +798,11 @@ export default {
     async getPSRPendingOneseries(data) {
       this.PSRpendingOneChart.data.series.pop();
       let series = Array();
-      for (let dataMonth in data.user) {
+      for (let dataMonth in data) {
         series.push(
-          data.user[dataMonth].tmp_average_psr.pending_1.minutes == null
+          data[dataMonth].tmp_average_psr.pending_1.minutes == null
             ? 0
-            : parseInt(data.user[dataMonth].tmp_average_psr.pending_1.minutes)
+            : parseInt(data[dataMonth].tmp_average_psr.pending_1.minutes)
         );
       }
       this.PSRpendingOneChart.data.series.push(series);
@@ -803,11 +812,11 @@ export default {
     async getPSRPendingTwoseries(data) {
       this.PSRpendingTwoChart.data.series.pop();
       let series = Array();
-      for (let dataMonth in data.user) {
+      for (let dataMonth in data) {
         series.push(
-          data.user[dataMonth].tmp_average_psr.pending_2.minutes == null
+          data[dataMonth].tmp_average_psr.pending_2.minutes == null
             ? 0
-            : parseInt(data.user[dataMonth].tmp_average_psr.pending_2.minutes)
+            : parseInt(data[dataMonth].tmp_average_psr.pending_2.minutes)
         );
       }
       this.PSRpendingTwoChart.data.series.push(series);
@@ -817,11 +826,11 @@ export default {
     async getPSRApprovalseries(data) {
       this.PSRapprovalChart.data.series.pop();
       let series = Array();
-      for (let dataMonth in data.user) {
+      for (let dataMonth in data) {
         series.push(
-          data.user[dataMonth].tmp_average_psr.approve.minutes == null
+          data[dataMonth].tmp_average_psr.approve.minutes == null
             ? 0
-            : parseInt(data.user[dataMonth].tmp_average_psr.approve.minutes)
+            : parseInt(data[dataMonth].tmp_average_psr.approve.minutes)
         );
       }
       this.PSRapprovalChart.data.series.push(series);
@@ -831,11 +840,11 @@ export default {
     async getPSRDeclineseries(data) {
       this.PSRdataDeclineChart.data.series.pop();
       let series = Array();
-      for (let dataMonth in data.user) {
+      for (let dataMonth in data) {
         series.push(
-          data.user[dataMonth].tmp_average_psr.decline.minutes == null
+          data[dataMonth].tmp_average_psr.decline.minutes == null
             ? 0
-            : parseInt(data.user[dataMonth].tmp_average_psr.decline.minutes)
+            : parseInt(data[dataMonth].tmp_average_psr.decline.minutes)
         );
       }
       this.PSRdataDeclineChart.data.series.push(series);
