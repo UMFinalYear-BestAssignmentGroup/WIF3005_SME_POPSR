@@ -365,6 +365,7 @@ import {
 } from "@/components";
 
 export default {
+  name: "overall-performance",
   components: {
     StatsCard,
     ChartCard

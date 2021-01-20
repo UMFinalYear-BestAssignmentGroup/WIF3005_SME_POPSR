@@ -368,6 +368,7 @@ import { required } from "vuelidate/lib/validators";
 import { StatsCard, ChartCard } from "@/components";
 
 export default {
+  name:"personal-performance",
   components: {
     StatsCard,
     ChartCard,
