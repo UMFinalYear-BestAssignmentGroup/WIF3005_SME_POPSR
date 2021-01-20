@@ -124,8 +124,8 @@
           data-background-color="orange"
         >
           <template slot="content">
-            <h4 class="title">PO Approval Per Month</h4>
-            <p class="category">Time Taken for Final Approval (Min)</p>
+            <h4 class="title">Time Taken for PO Approval Per Month (Min)</h4>
+              <p class="category">Final Approval </p>
           </template>
 
           <template slot="footer">
@@ -148,7 +148,7 @@
         >
           <template slot="content">
             <h4 class="title">PO Decline Per Month</h4>
-            <p class="category">Time taken for Decline (Min)</p>
+            <p class="category">Purchase Order that has been rejected</p>
           </template>
 
           <template slot="footer">
@@ -170,8 +170,8 @@
           data-background-color="green"
         >
           <template slot="content">
-            <h4 class="title">PO Pending 1</h4>
-            <p class="category">Time taken for First Approval (Min)</p>
+            <h4 class="title">Time Taken for PO Pending 1 (Min)</h4>
+            <p class="category">First Approval</p>
           </template>
 
           <template slot="footer">
@@ -193,8 +193,8 @@
           data-background-color="blue"
         >
           <template slot="content">
-            <h4 class="title">PO Pending 2</h4>
-            <p class="category">Time taken for Second Approval (Min)</p>
+            <h4 class="title">Time Taken for PO Pending 2 (Min)</h4>
+            <p class="category">Second Approval </p>
           </template>
 
           <template slot="footer">
@@ -218,8 +218,8 @@
           data-background-color="purple"
         >
           <template slot="content">
-            <h4 class="title">PSR Approval Per Month</h4>
-            <p class="category">Time Taken for Final Approval (Min)</p>
+            <h4 class="title">Time Taken for PSR Approval Per Month (Min)</h4>
+            <p class="category">Final Approval </p>
           </template>
 
           <template slot="footer">
@@ -242,7 +242,7 @@
         >
           <template slot="content">
             <h4 class="title">PSR Decline Per Month</h4>
-            <p class="category">Time taken for Decline (Min)</p>
+            <p class="category">PSR that has been rejected</p>
           </template>
 
           <template slot="footer">
@@ -264,8 +264,8 @@
           data-background-color="green"
         >
           <template slot="content">
-            <h4 class="title">PSR Pending 1</h4>
-            <p class="category">Time taken for First Approval (Min)</p>
+            <h4 class="title">Time Taken for PSR Pending 1 (Min)</h4>
+            <p class="category">First Approval</p>
           </template>
 
           <template slot="footer">
@@ -287,8 +287,8 @@
           data-background-color="blue"
         >
           <template slot="content">
-            <h4 class="title">PSR Pending 2</h4>
-            <p class="category">Time taken for Second Approval (Min)</p>
+            <h4 class="title">Time taken for PSR Pending 2 (Min)</h4>
+            <p class="category">Second Approval</p>
           </template>
 
           <template slot="footer">
