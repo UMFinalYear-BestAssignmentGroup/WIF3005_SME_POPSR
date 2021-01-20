@@ -4,9 +4,17 @@
       <div
         class="md-layout-item md-medium-size-90 md-xsmall-size-90 md-size-90"
       >
-      <router-link style="margin-left: 10px;font-size: 18px; font-weight:400" :to=dashboardURL>Dashboard</router-link>
-      <span style="font-size: 18px; font-weight:400"> / {{ userName }} {{ userTier }}</span>
-        <h1 style="margin-left: 10px; font-size:35px">{{ userName }} {{ userTier }}</h1>
+        <router-link
+          style="margin-left: 10px; font-size: 18px; font-weight: 400"
+          :to="dashboardURL"
+          >Dashboard</router-link
+        >
+        <span style="font-size: 18px; font-weight: 400">
+          / {{ userName }} {{ userTier }}</span
+        >
+        <h1 style="margin-left: 10px; font-size: 35px">
+          {{ userName }} {{ userTier }}
+        </h1>
 
         <table cls="clsForm" width="80%:">
           <col width="15%" />
@@ -34,7 +42,29 @@
       <div
         class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-25"
       >
-        <stats-card data-background-color="green">
+        <stats-card data-background-color="orange">
+          <template slot="header">
+            <md-icon>description</md-icon>
+          </template>
+
+          <template slot="content">
+            <p class="category">Total Submitted PO</p>
+            <h3 class="title">{{totalSubmittedPO }}</h3>
+          </template>
+
+          <template slot="footer">
+            <div class="stats">
+              <md-icon>date_range</md-icon>
+              {{ new Date().toLocaleString() }}
+            </div>
+          </template>
+        </stats-card>
+      </div>
+
+      <div
+        class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-25"
+      >
+        <stats-card data-background-color="orange">
           <template slot="header">
             <md-icon>article</md-icon>
           </template>
@@ -52,18 +82,61 @@
           </template>
         </stats-card>
       </div>
+      <div
+        class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-25"
+      >
+        <stats-card data-background-color="orange">
+          <template slot="header">
+            <md-icon>assignment</md-icon>
+          </template>
+
+          <template slot="content">
+            <p class="category">Total Declined PO</p>
+            <h3 class="title">{{totalDeclinePO}}</h3>
+          </template>
+
+          <template slot="footer">
+            <div class="stats">
+              <md-icon>date_range</md-icon>
+              {{ new Date().toLocaleString() }}
+            </div>
+          </template>
+        </stats-card>
+      </div>
 
       <div
         class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-25"
       >
         <stats-card data-background-color="orange">
           <template slot="header">
-            <md-icon>content_copy</md-icon>
+            <md-icon>work</md-icon>
           </template>
 
           <template slot="content">
             <p class="category">Efficiency for PO Approval</p>
             <h3 class="title">{{ POefficiency }}%</h3>
+          </template>
+
+          <template slot="footer">
+            <div class="stats">
+              <md-icon>date_range</md-icon>
+              {{ new Date().toLocaleString() }}
+            </div>
+          </template>
+        </stats-card>
+      </div>
+
+      <div
+        class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-25"
+      >
+        <stats-card data-background-color="purple">
+          <template slot="header">
+            <md-icon>description</md-icon>
+          </template>
+
+          <template slot="content">
+            <p class="category">Total Submitted PSR</p>
+            <h3 class="title">{{ totalSubmittedPSR }}</h3>
           </template>
 
           <template slot="footer">
@@ -100,9 +173,30 @@
       <div
         class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-25"
       >
-        <stats-card data-background-color="red">
+        <stats-card data-background-color="purple">
           <template slot="header">
-            <md-icon>content_copy</md-icon>
+            <md-icon>assignment</md-icon>
+          </template>
+
+          <template slot="content">
+            <p class="category">Total Decline PSR</p>
+            <h3 class="title">{{totalDeclinePSR }}</h3>
+          </template>
+
+          <template slot="footer">
+            <div class="stats">
+              <md-icon>date_range</md-icon>
+              {{ new Date().toLocaleString() }}
+            </div>
+          </template>
+        </stats-card>
+      </div>
+      <div
+        class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-25"
+      >
+        <stats-card data-background-color="purple">
+          <template slot="header">
+            <md-icon>work</md-icon>
           </template>
 
           <template slot="content">
@@ -128,7 +222,7 @@
             :chart-responsive-options="POapprovalChart.responsiveOptions"
             :chart-type="'Bar'"
             :key="componentKey"
-            data-background-color="red"
+            data-background-color="orange"
           >
             <template slot="content">
               <h4 class="title">PO Approval Per Month</h4>
@@ -144,7 +238,7 @@
           </chart-card>
         </div>
       </template>
-      
+
       <template v-if="getTier === 't2'">
         <div
           class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-50"
@@ -154,7 +248,7 @@
             :chart-options="POpendingOneChart.options"
             :chart-type="'Line'"
             :key="componentKey"
-            data-background-color="green"
+            data-background-color="orange"
           >
             <template slot="content">
               <h4 class="title">PO Pending 1</h4>
@@ -179,7 +273,7 @@
             :chart-options="POpendingTwoChart.options"
             :chart-type="'Line'"
             :key="componentKey"
-            data-background-color="blue"
+            data-background-color="orange"
           >
             <template slot="content">
               <h4 class="title">PO Pending 2</h4>
@@ -205,7 +299,7 @@
             :chart-responsive-options="PSRapprovalChart.responsiveOptions"
             :chart-type="'Bar'"
             :key="componentKey"
-            data-background-color="red"
+            data-background-color="purple"
           >
             <template slot="content">
               <h4 class="title">PSR Approval Per Month</h4>
@@ -221,7 +315,7 @@
           </chart-card>
         </div>
       </template>
-      
+
       <template v-if="getTier === 't2'">
         <div
           class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-50"
@@ -231,7 +325,7 @@
             :chart-options="PSRpendingOneChart.options"
             :chart-type="'Line'"
             :key="componentKey"
-            data-background-color="green"
+            data-background-color="purple"
           >
             <template slot="content">
               <h4 class="title">PSR Pending 1</h4>
@@ -256,7 +350,7 @@
             :chart-options="PSRpendingTwoChart.options"
             :chart-type="'Line'"
             :key="componentKey"
-            data-background-color="blue"
+            data-background-color="purple"
           >
             <template slot="content">
               <h4 class="title">PSR Pending 2</h4>
@@ -297,6 +391,8 @@ export default {
       userTier: "",
       getTier: "",
       performanceData: [],
+      totalSubmittedPO: 0,
+      totalSubmittedPSR: 0,
       totalPO: 0,
       totalPSR: 0,
       POefficiency: 0,
@@ -526,7 +622,6 @@ export default {
           ],
         ],
       },
-
     };
   },
   async created() {
@@ -613,6 +708,15 @@ export default {
             : parseInt(data[dataMonth].total_po);
       }
     },
+    async getTotalSubmittedPO(data) {
+      this.totalSubmittedPO = 0;
+      for (let dataMonth in data) {
+        this.totalSubmittedPO +=
+          data[dataMonth].po_total_submitted == null
+            ? 0
+            : parseInt(data[dataMonth].po_total_submitted);
+      }
+    },
 
     async getPOEfficiency(data) {
       let totalEfficiency = 0;
@@ -648,7 +752,15 @@ export default {
             : parseInt(data[dataMonth].total_psr);
       }
     },
-
+    async getTotalSubmittedPSR(data) {
+      this.totalSubmittedPSR = 0;
+      for (let dataMonth in data) {
+        this.totalSubmittedPSR +=
+          data[dataMonth].psr_total_submitted == null
+            ? 0
+            : parseInt(data[dataMonth].psr_total_submitted);
+      }
+    },
     async getPSREfficiency(data) {
       let totalEfficiency = 0;
       this.PSRefficiency = 0;
@@ -766,9 +878,12 @@ export default {
     },
     async getAllData(data) {
       await this.getTotalPO(data);
+      await this.getTotalSubmittedPO(data);
       await this.getPOEfficiency(data);
       await this.getTotalDeclinePO(data);
+
       await this.getTotalPSR(data);
+      await this.getTotalSubmittedPSR(data);
       await this.getPSREfficiency(data);
       await this.getTotalDeclinePSR(data);
 
