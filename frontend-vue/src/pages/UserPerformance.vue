@@ -908,7 +908,7 @@ export default {
     },
   },
   watch: {
-      year(val) {
+      year() {
         this.yearChange();
       }
     }
