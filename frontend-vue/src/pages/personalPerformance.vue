@@ -722,7 +722,9 @@ export default {
     },
     async getPOData(data) {
       this.totalPO = 0;
-      this.totalSubmittedPO = 0;
+      this.totalSubmittedPO = data[0].po_total_submitted == null
+          ? 0
+          : parseInt(data[0].po_total_submitted);
       let totalEfficiency = 0;
       this.POefficiency = 0;
       let monthCount = 0;
@@ -733,11 +735,6 @@ export default {
           data[dataMonth].total_po == null
             ? 0
             : parseInt(data[dataMonth].total_po);
-
-        this.totalSubmittedPO +=
-          data[dataMonth].po_total_submitted == null
-            ? 0
-            : parseInt(data[dataMonth].po_total_submitted);
 
         totalEfficiency +=
           data[dataMonth].po_efficiency == null
@@ -755,7 +752,9 @@ export default {
     },
     async getPSRData(data) {
       this.totalPSR = 0;
-      this.totalSubmittedPSR = 0;
+      this.totalSubmittedPSR = data[0].psr_total_submitted == null
+          ? 0
+          : parseInt(data[0].psr_total_submitted);
       let totalEfficiency = 0;
       this.PSRefficiency = 0;
       let monthCount = 0;
@@ -765,11 +764,6 @@ export default {
           data[dataMonth].total_psr == null
             ? 0
             : parseInt(data[dataMonth].total_psr);
-
-        this.totalSubmittedPSR +=
-          data[dataMonth].psr_total_submitted == null
-            ? 0
-            : parseInt(data[dataMonth].psr_total_submitted);
 
         totalEfficiency +=
           data[dataMonth].psr_efficiency == null
