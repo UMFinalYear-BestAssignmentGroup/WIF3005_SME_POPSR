@@ -3,7 +3,11 @@
 
     <side-bar>
       <mobile-menu slot="content"></mobile-menu>
-      <sidebar-link v-if="is_admin == 'true' || t4 == 'true'" :to="{ name: 'Performance', params: { id: this.id } }">
+      <sidebar-link v-if="is_admin == 'true'" :to="{ name: 'Overall Performance', params: { id: this.id } }">
+        <!-- <md-icon>dashboard for admin and t4 user</md-icon> -->
+        <p>Dashboard</p>
+      </sidebar-link>
+      <sidebar-link v-if="t4 == 'true'" :to="{ name: 'Performance Dashboard', params: { id: this.id } }">
         <!-- <md-icon>dashboard for admin and t4 user</md-icon> -->
         <p>Dashboard</p>
       </sidebar-link>

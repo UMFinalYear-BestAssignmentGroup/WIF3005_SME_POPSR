@@ -8,24 +8,39 @@
           {{ userName }} {{ userTier }}
         </h1>
 
-        <table cls="clsForm" width="80%:">
-          <col width="15%" />
-          <col width="70%" />
+        <table cls="clsForm">
           <tr>
             <td class="clsLabel">Year:</td>
+            <td class="clsValue">
+              <b-tooltip label="Previous" type="is-light" position="is-bottom">
+                <b-button
+                  @click="year--"
+                  size="is-small"
+                  float="right"
+                  type="is-light"
+                >
+                  <md-icon>navigate_before</md-icon>
+                </b-button>
+              </b-tooltip>
+            </td>
             <td class="clsValue">
               <b-input v-model="year" style="width: 98%"></b-input>
               <div class="error" v-if="!$v.year.required && isPosted">
                 Year is required
               </div>
             </td>
-            <td>
-              <md-button
-                class="md-raised md-success"
-                @click="filter_year()"
-                style="margin: auto; display: block"
-                >Filter</md-button
-              >
+            <td class="clsValue">
+              <b-tooltip label="Next" type="is-light" position="is-bottom">
+                <b-button
+                  @click="year == new Date().getFullYear() ? year : year++"
+                  size="is-small"
+                  float="right"
+                  type="is-light"
+                >
+                  <md-icon>navigate_next</md-icon>
+                </b-button>
+                &nbsp;&nbsp;
+              </b-tooltip>
             </td>
           </tr>
         </table>
@@ -933,6 +948,11 @@ export default {
       await this.getPSRApprovalseries(data);
       await this.getPSRPendingOneseries(data);
       await this.getPSRPendingTwoseries(data);
+    },
+  },
+  watch: {
+    year() {
+      this.yearChange();
     },
   },
 };
