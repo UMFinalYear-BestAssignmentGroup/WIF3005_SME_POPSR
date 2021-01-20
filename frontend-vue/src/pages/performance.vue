@@ -29,28 +29,7 @@
       <div
         class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-25"
       >
-        <stats-card data-background-color="orange">
-          <template slot="header">
-            <md-icon>description</md-icon>
-          </template>
-
-          <template slot="content">
-            <p class="category">Total Submitted PO</p>
-            <h3 class="title">{{totalSubmittedPO }}</h3>
-          </template>
-
-          <template slot="footer">
-            <div class="stats">
-              <md-icon>date_range</md-icon>
-              {{ new Date().toLocaleString() }}
-            </div>
-          </template>
-        </stats-card>
-      </div>
-      <div
-        class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-25"
-      >
-        <stats-card data-background-color="orange">
+        <stats-card data-background-color="green">
           <template slot="header">
             <md-icon>article</md-icon>
           </template>
@@ -73,54 +52,12 @@
       >
         <stats-card data-background-color="orange">
           <template slot="header">
-            <md-icon>assignment</md-icon>
-          </template>
-
-          <template slot="content">
-            <p class="category">Total Declined PO</p>
-            <h3 class="title">{{totalDeclinePO}}</h3>
-          </template>
-
-          <template slot="footer">
-            <div class="stats">
-              <md-icon>date_range</md-icon>
-              {{ new Date().toLocaleString() }}
-            </div>
-          </template>
-        </stats-card>
-      </div>
-      <div
-        class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-25"
-      >
-        <stats-card data-background-color="orange">
-          <template slot="header">
-            <md-icon>work</md-icon>
+            <md-icon>content_copy</md-icon>
           </template>
 
           <template slot="content">
             <p class="category">Efficiency for PO Approval</p>
             <h3 class="title">{{ POefficiency }}%</h3>
-          </template>
-
-          <template slot="footer">
-            <div class="stats">
-              <md-icon>date_range</md-icon>
-              {{ new Date().toLocaleString() }}
-            </div>
-          </template>
-        </stats-card>
-      </div>
-      <div
-        class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-25"
-      >
-        <stats-card data-background-color="purple">
-          <template slot="header">
-            <md-icon>description</md-icon>
-          </template>
-
-          <template slot="content">
-            <p class="category">Total Submitted PSR</p>
-            <h3 class="title">{{totalSubmittedPSR }}</h3>
           </template>
 
           <template slot="footer">
@@ -157,30 +94,9 @@
       <div
         class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-25"
       >
-        <stats-card data-background-color="purple">
+        <stats-card data-background-color="red">
           <template slot="header">
-            <md-icon>assignment</md-icon>
-          </template>
-
-          <template slot="content">
-            <p class="category">Total Declined PSR</p>
-            <h3 class="title">{{totalDeclinePSR}}</h3>
-          </template>
-
-          <template slot="footer">
-            <div class="stats">
-              <md-icon>date_range</md-icon>
-              {{ new Date().toLocaleString() }}
-            </div>
-          </template>
-        </stats-card>
-      </div>
-      <div
-        class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-25"
-      >
-        <stats-card data-background-color="purple">
-          <template slot="header">
-            <md-icon>work</md-icon>
+            <md-icon>content_copy</md-icon>
           </template>
 
           <template slot="content">
@@ -205,7 +121,7 @@
           :chart-responsive-options="POapprovalChart.responsiveOptions"
           :chart-type="'Bar'"
           :key="componentKey"
-          data-background-color="orange"
+          data-background-color="red"
         >
           <template slot="content">
             <h4 class="title">PO Approval Per Month</h4>
@@ -228,7 +144,7 @@
           :chart-options="POdataDeclineChart.options"
           :chart-type="'Bar'"
           :key="componentKey"
-          data-background-color="red"
+          data-background-color="green"
         >
           <template slot="content">
             <h4 class="title">PO Decline Per Month</h4>
@@ -299,7 +215,7 @@
           :chart-responsive-options="PSRapprovalChart.responsiveOptions"
           :chart-type="'Bar'"
           :key="componentKey"
-          data-background-color="purple"
+          data-background-color="red"
         >
           <template slot="content">
             <h4 class="title">PSR Approval Per Month</h4>
@@ -322,7 +238,7 @@
           :chart-options="PSRdataDeclineChart.options"
           :chart-type="'Bar'"
           :key="componentKey"
-          data-background-color="red"
+          data-background-color="green"
         >
           <template slot="content">
             <h4 class="title">PSR Decline Per Month</h4>
@@ -388,8 +304,8 @@
       >
         <md-card>
           <md-card-header data-background-color="orange">
-            <h4 class="title">Employees List</h4>
-            <p class="category">Click Username for Employees' Performance</p>
+            <h4 class="title">Employees Stats</h4>
+            <p class="category">Employees in this company</p>
           </md-card-header>
           <md-card-content>
             <b-loading
@@ -461,8 +377,6 @@ export default {
       year: 2021,
       performanceData: [],
       users: [],
-      totalSubmittedPO: 0,
-      totalSubmittedPSR: 0,
       totalPO: 0,
       totalPSR: 0,
       POefficiency: 0,
@@ -830,15 +744,6 @@ export default {
             : parseInt(data.overall[dataMonth].total_po_decline);
       }
     },
-    async getTotalSubmittedPO(data) {
-      this.totalSubmittedPO = 0;
-      for (let dataMonth in data) {
-        this.totalSubmittedPO +=
-          data[dataMonth].po_total_submitted == null
-            ? 0
-            : parseInt(data[dataMonth].po_total_submitted);
-      }
-    },
     async getTotalPSR(data) {
       this.totalPSR = 0;
       for (let dataMonth in data.overall) {
@@ -872,15 +777,6 @@ export default {
           data.overall[dataMonth].total_psr_decline == null
             ? 0
             : parseInt(data.overall[dataMonth].total_psr_decline);
-      }
-    },
-    async getTotalSubmittedPSR(data) {
-      this.totalSubmittedPSR = 0;
-      for (let dataMonth in data) {
-        this.totalSubmittedPSR +=
-          data[dataMonth].psr_total_submitted == null
-            ? 0
-            : parseInt(data[dataMonth].psr_total_submitted);
       }
     },
 
@@ -1007,13 +903,9 @@ export default {
       await this.getTotalPO(data);
       await this.getPOEfficiency(data);
       await this.getTotalDeclinePO(data);
-      await this.getTotalSubmittedPO(data);
-
       await this.getTotalPSR(data);
       await this.getPSREfficiency(data);
       await this.getTotalDeclinePSR(data);
-      await this.getTotalSubmittedPSR(data);
-
 
       await this.getPOApprovalseries(data);
       await this.getPODeclineseries(data);
