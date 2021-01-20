@@ -1,373 +1,429 @@
 <template>
   <div class="content">
-    <div class="md-layout">
-      <div
-        class="md-layout-item md-medium-size-90 md-xsmall-size-90 md-size-90"
-      >
-        <table cls="clsForm" width="80%:">
-          <col width="15%" />
-          <col width="70%" />
-          <tr>
-            <td class="clsLabel">Year:</td>
-            <td class="clsValue">
-              <b-input v-model="year" style="width: 98%"></b-input>
-              <div class="error" v-if="!$v.year.required && isPosted">
-                Year is required
+    <md-card>
+      <md-card-header :data-background-color="dataBackgroundColor">
+        <h1 class="title">Performance</h1>
+        <!-- <p class="category">Complete your profile</p> -->
+      </md-card-header>
+      <md-card-content>
+        <b-tabs type="is-toggle" size="is-medium" expanded>
+          <b-tab-item :visible="true" label="Statistic">
+          
+              <div class="md-layout">
+                <div
+                  class="md-layout-item md-medium-size-90 md-xsmall-size-90 md-size-90"
+                >
+                  <table cls="clsForm" width="80%:">
+                    <col width="15%" />
+                    <col width="70%" />
+                    <tr>
+                      <td class="clsLabel">Year:</td>
+                      <td class="clsValue">
+                        <b-input v-model="year" style="width: 98%"></b-input>
+                        <div class="error" v-if="!$v.year.required && isPosted">
+                          Year is required
+                        </div>
+                      </td>
+                      <td>
+                        <md-button
+                          class="md-raised md-success"
+                          @click="filter_year()"
+                          style="margin: auto; display: block"
+                          >Filter</md-button
+                        >
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+                <div
+                  class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-25"
+                >
+                  <stats-card data-background-color="orange">
+                    <template slot="header">
+                      <md-icon>article</md-icon>
+                    </template>
+
+                    <template slot="content">
+                      <p class="category">Total Approved PO</p>
+                      <h3 class="title">{{ totalPO - totalDeclinePO }}</h3>
+                    </template>
+
+                    <template slot="footer">
+                      <div class="stats">
+                        <md-icon>date_range</md-icon>
+                        {{ new Date().toLocaleString() }}
+                      </div>
+                    </template>
+                  </stats-card>
+                </div>
+                <div
+                  class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-25"
+                >
+                  <stats-card data-background-color="orange">
+                    <template slot="header">
+                      <md-icon>work</md-icon>
+                    </template>
+
+                    <template slot="content">
+                      <p class="category">Efficiency for PO Approval</p>
+                      <h3 class="title">{{ POefficiency }}%</h3>
+                    </template>
+
+                    <template slot="footer">
+                      <div class="stats">
+                        <md-icon>date_range</md-icon>
+                        {{ new Date().toLocaleString() }}
+                      </div>
+                    </template>
+                  </stats-card>
+                </div>
+                <div
+                  class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-25"
+                >
+                  <stats-card data-background-color="purple">
+                    <template slot="header">
+                      <md-icon>article</md-icon>
+                    </template>
+
+                    <template slot="content">
+                      <p class="category">Total Approved PSR</p>
+                      <h3 class="title">
+                        {{ totalPSR - totalDeclinePSR }}
+                      </h3>
+                    </template>
+
+                    <template slot="footer">
+                      <div class="stats">
+                        <md-icon>date_range</md-icon>
+                        {{ new Date().toLocaleString() }}
+                      </div>
+                    </template>
+                  </stats-card>
+                </div>
+                <div
+                  class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-25"
+                >
+                  <stats-card data-background-color="purple">
+                    <template slot="header">
+                      <md-icon>work</md-icon>
+                    </template>
+
+                    <template slot="content">
+                      <p class="category">Efficiency for PSR Approval</p>
+                      <h3 class="title">{{ PSRefficiency }}%</h3>
+                    </template>
+
+                    <template slot="footer">
+                      <div class="stats">
+                        <md-icon>date_range</md-icon>
+                        {{ new Date().toLocaleString() }}
+                      </div>
+                    </template>
+                  </stats-card>
+                </div>
+                <div
+                  class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-50"
+                >
+                  <chart-card
+                    :chart-data="POapprovalChart.data"
+                    :chart-options="POapprovalChart.options"
+                    :chart-responsive-options="
+                      POapprovalChart.responsiveOptions
+                    "
+                    :chart-type="'Bar'"
+                    :key="componentKey"
+                    data-background-color="orange"
+                  >
+                    <template slot="content">
+                      <h4 class="title">
+                        Time Taken for PO Approval Per Month (Min)
+                      </h4>
+                      <p class="category">Final Approval</p>
+                    </template>
+
+                    <template slot="footer">
+                      <div class="stats">
+                        <md-icon>access_time</md-icon>
+                        {{ new Date().toLocaleString() }}
+                      </div>
+                    </template>
+                  </chart-card>
+                </div>
+                <div
+                  class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-50"
+                >
+                  <chart-card
+                    :chart-data="POdataDeclineChart.data"
+                    :chart-options="POdataDeclineChart.options"
+                    :chart-type="'Bar'"
+                    :key="componentKey"
+                    data-background-color="red"
+                  >
+                    <template slot="content">
+                      <h4 class="title">PO Decline Per Month</h4>
+                      <p class="category">
+                        Purchase Order that has been rejected
+                      </p>
+                    </template>
+
+                    <template slot="footer">
+                      <div class="stats">
+                        <md-icon>access_time</md-icon>
+                        {{ new Date().toLocaleString() }}
+                      </div>
+                    </template>
+                  </chart-card>
+                </div>
+                <div
+                  class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-50"
+                >
+                  <chart-card
+                    :chart-data="POpendingOneChart.data"
+                    :chart-options="POpendingOneChart.options"
+                    :chart-type="'Line'"
+                    :key="componentKey"
+                    data-background-color="green"
+                  >
+                    <template slot="content">
+                      <h4 class="title">Time Taken for PO Pending 1 (Min)</h4>
+                      <p class="category">First Approval</p>
+                    </template>
+
+                    <template slot="footer">
+                      <div class="stats">
+                        <md-icon>access_time</md-icon>
+                        {{ new Date().toLocaleString() }}
+                      </div>
+                    </template>
+                  </chart-card>
+                </div>
+                <div
+                  class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-50"
+                >
+                  <chart-card
+                    :chart-data="POpendingTwoChart.data"
+                    :chart-options="POpendingTwoChart.options"
+                    :chart-type="'Line'"
+                    :key="componentKey"
+                    data-background-color="blue"
+                  >
+                    <template slot="content">
+                      <h4 class="title">Time Taken for PO Pending 2 (Min)</h4>
+                      <p class="category">Second Approval</p>
+                    </template>
+
+                    <template slot="footer">
+                      <div class="stats">
+                        <md-icon>access_time</md-icon>
+                        {{ new Date().toLocaleString() }}
+                      </div>
+                    </template>
+                  </chart-card>
+                </div>
+
+                <div
+                  class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-50"
+                >
+                  <chart-card
+                    :chart-data="PSRapprovalChart.data"
+                    :chart-options="PSRapprovalChart.options"
+                    :chart-responsive-options="
+                      PSRapprovalChart.responsiveOptions
+                    "
+                    :chart-type="'Bar'"
+                    :key="componentKey"
+                    data-background-color="purple"
+                  >
+                    <template slot="content">
+                      <h4 class="title">
+                        Time Taken for PSR Approval Per Month (Min)
+                      </h4>
+                      <p class="category">Final Approval</p>
+                    </template>
+
+                    <template slot="footer">
+                      <div class="stats">
+                        <md-icon>access_time</md-icon>
+                        {{ new Date().toLocaleString() }}
+                      </div>
+                    </template>
+                  </chart-card>
+                </div>
+                <div
+                  class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-50"
+                >
+                  <chart-card
+                    :chart-data="PSRdataDeclineChart.data"
+                    :chart-options="PSRdataDeclineChart.options"
+                    :chart-type="'Bar'"
+                    :key="componentKey"
+                    data-background-color="red"
+                  >
+                    <template slot="content">
+                      <h4 class="title">PSR Decline Per Month</h4>
+                      <p class="category">PSR that has been rejected</p>
+                    </template>
+
+                    <template slot="footer">
+                      <div class="stats">
+                        <md-icon>access_time</md-icon>
+                        {{ new Date().toLocaleString() }}
+                      </div>
+                    </template>
+                  </chart-card>
+                </div>
+                <div
+                  class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-50"
+                >
+                  <chart-card
+                    :chart-data="PSRpendingOneChart.data"
+                    :chart-options="PSRpendingOneChart.options"
+                    :chart-type="'Line'"
+                    :key="componentKey"
+                    data-background-color="green"
+                  >
+                    <template slot="content">
+                      <h4 class="title">Time Taken for PSR Pending 1 (Min)</h4>
+                      <p class="category">First Approval</p>
+                    </template>
+
+                    <template slot="footer">
+                      <div class="stats">
+                        <md-icon>access_time</md-icon>
+                        {{ new Date().toLocaleString() }}
+                      </div>
+                    </template>
+                  </chart-card>
+                </div>
+                <div
+                  class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-50"
+                >
+                  <chart-card
+                    :chart-data="PSRpendingTwoChart.data"
+                    :chart-options="PSRpendingTwoChart.options"
+                    :chart-type="'Line'"
+                    :key="componentKey"
+                    data-background-color="blue"
+                  >
+                    <template slot="content">
+                      <h4 class="title">Time taken for PSR Pending 2 (Min)</h4>
+                      <p class="category">Second Approval</p>
+                    </template>
+
+                    <template slot="footer">
+                      <div class="stats">
+                        <md-icon>access_time</md-icon>
+                        {{ new Date().toLocaleString() }}
+                      </div>
+                    </template>
+                  </chart-card>
+                </div>
               </div>
-            </td>
-            <td>
-              <md-button
-                class="md-raised md-success"
-                @click="filter_year()"
-                style="margin: auto; display: block"
-                >Filter</md-button
-              >
-            </td>
-          </tr>
-        </table>
-      </div>
-      <div
-        class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-25"
-      >
-        <stats-card data-background-color="orange">
-          <template slot="header">
-            <md-icon>article</md-icon>
-          </template>
+          </b-tab-item>
 
-          <template slot="content">
-            <p class="category">Total Approved PO</p>
-            <h3 class="title">{{ totalPO - totalDeclinePO }}</h3>
-          </template>
-
-          <template slot="footer">
-            <div class="stats">
-              <md-icon>date_range</md-icon>
-              {{ new Date().toLocaleString() }}
-            </div>
-          </template>
-        </stats-card>
-      </div>
-      <div
-        class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-25"
-      >
-        <stats-card data-background-color="orange">
-          <template slot="header">
-            <md-icon>work</md-icon>
-          </template>
-
-          <template slot="content">
-            <p class="category">Efficiency for PO Approval</p>
-            <h3 class="title">{{ POefficiency }}%</h3>
-          </template>
-
-          <template slot="footer">
-            <div class="stats">
-              <md-icon>date_range</md-icon>
-              {{ new Date().toLocaleString() }}
-            </div>
-          </template>
-        </stats-card>
-      </div>
-      <div
-        class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-25"
-      >
-        <stats-card data-background-color="purple">
-          <template slot="header">
-            <md-icon>article</md-icon>
-          </template>
-
-          <template slot="content">
-            <p class="category">Total Approved PSR</p>
-            <h3 class="title">
-              {{ totalPSR - totalDeclinePSR }}
-            </h3>
-          </template>
-
-          <template slot="footer">
-            <div class="stats">
-              <md-icon>date_range</md-icon>
-              {{ new Date().toLocaleString() }}
-            </div>
-          </template>
-        </stats-card>
-      </div>
-      <div
-        class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-25"
-      >
-        <stats-card data-background-color="purple">
-          <template slot="header">
-            <md-icon>work</md-icon>
-          </template>
-
-          <template slot="content">
-            <p class="category">Efficiency for PSR Approval</p>
-            <h3 class="title">{{ PSRefficiency }}%</h3>
-          </template>
-
-          <template slot="footer">
-            <div class="stats">
-              <md-icon>date_range</md-icon>
-              {{ new Date().toLocaleString() }}
-            </div>
-          </template>
-        </stats-card>
-      </div>
-      <div
-        class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-50"
-      >
-        <chart-card
-          :chart-data="POapprovalChart.data"
-          :chart-options="POapprovalChart.options"
-          :chart-responsive-options="POapprovalChart.responsiveOptions"
-          :chart-type="'Bar'"
-          :key="componentKey"
-          data-background-color="orange"
-        >
-          <template slot="content">
-            <h4 class="title">Time Taken for PO Approval Per Month (Min)</h4>
-              <p class="category">Final Approval </p>
-          </template>
-
-          <template slot="footer">
-            <div class="stats">
-              <md-icon>access_time</md-icon>
-              {{ new Date().toLocaleString() }}
-            </div>
-          </template>
-        </chart-card>
-      </div>
-      <div
-        class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-50"
-      >
-        <chart-card
-          :chart-data="POdataDeclineChart.data"
-          :chart-options="POdataDeclineChart.options"
-          :chart-type="'Bar'"
-          :key="componentKey"
-          data-background-color="red"
-        >
-          <template slot="content">
-            <h4 class="title">PO Decline Per Month</h4>
-            <p class="category">Purchase Order that has been rejected</p>
-          </template>
-
-          <template slot="footer">
-            <div class="stats">
-              <md-icon>access_time</md-icon>
-              {{ new Date().toLocaleString() }}
-            </div>
-          </template>
-        </chart-card>
-      </div>
-      <div
-        class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-50"
-      >
-        <chart-card
-          :chart-data="POpendingOneChart.data"
-          :chart-options="POpendingOneChart.options"
-          :chart-type="'Line'"
-          :key="componentKey"
-          data-background-color="green"
-        >
-          <template slot="content">
-            <h4 class="title">Time Taken for PO Pending 1 (Min)</h4>
-            <p class="category">First Approval</p>
-          </template>
-
-          <template slot="footer">
-            <div class="stats">
-              <md-icon>access_time</md-icon>
-              {{ new Date().toLocaleString() }}
-            </div>
-          </template>
-        </chart-card>
-      </div>
-      <div
-        class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-50"
-      >
-        <chart-card
-          :chart-data="POpendingTwoChart.data"
-          :chart-options="POpendingTwoChart.options"
-          :chart-type="'Line'"
-          :key="componentKey"
-          data-background-color="blue"
-        >
-          <template slot="content">
-            <h4 class="title">Time Taken for PO Pending 2 (Min)</h4>
-            <p class="category">Second Approval </p>
-          </template>
-
-          <template slot="footer">
-            <div class="stats">
-              <md-icon>access_time</md-icon>
-              {{ new Date().toLocaleString() }}
-            </div>
-          </template>
-        </chart-card>
-      </div>
-
-      <div
-        class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-50"
-      >
-        <chart-card
-          :chart-data="PSRapprovalChart.data"
-          :chart-options="PSRapprovalChart.options"
-          :chart-responsive-options="PSRapprovalChart.responsiveOptions"
-          :chart-type="'Bar'"
-          :key="componentKey"
-          data-background-color="purple"
-        >
-          <template slot="content">
-            <h4 class="title">Time Taken for PSR Approval Per Month (Min)</h4>
-            <p class="category">Final Approval </p>
-          </template>
-
-          <template slot="footer">
-            <div class="stats">
-              <md-icon>access_time</md-icon>
-              {{ new Date().toLocaleString() }}
-            </div>
-          </template>
-        </chart-card>
-      </div>
-      <div
-        class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-50"
-      >
-        <chart-card
-          :chart-data="PSRdataDeclineChart.data"
-          :chart-options="PSRdataDeclineChart.options"
-          :chart-type="'Bar'"
-          :key="componentKey"
-          data-background-color="red"
-        >
-          <template slot="content">
-            <h4 class="title">PSR Decline Per Month</h4>
-            <p class="category">PSR that has been rejected</p>
-          </template>
-
-          <template slot="footer">
-            <div class="stats">
-              <md-icon>access_time</md-icon>
-              {{ new Date().toLocaleString() }}
-            </div>
-          </template>
-        </chart-card>
-      </div>
-      <div
-        class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-50"
-      >
-        <chart-card
-          :chart-data="PSRpendingOneChart.data"
-          :chart-options="PSRpendingOneChart.options"
-          :chart-type="'Line'"
-          :key="componentKey"
-          data-background-color="green"
-        >
-          <template slot="content">
-            <h4 class="title">Time Taken for PSR Pending 1 (Min)</h4>
-            <p class="category">First Approval</p>
-          </template>
-
-          <template slot="footer">
-            <div class="stats">
-              <md-icon>access_time</md-icon>
-              {{ new Date().toLocaleString() }}
-            </div>
-          </template>
-        </chart-card>
-      </div>
-      <div
-        class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-50"
-      >
-        <chart-card
-          :chart-data="PSRpendingTwoChart.data"
-          :chart-options="PSRpendingTwoChart.options"
-          :chart-type="'Line'"
-          :key="componentKey"
-          data-background-color="blue"
-        >
-          <template slot="content">
-            <h4 class="title">Time taken for PSR Pending 2 (Min)</h4>
-            <p class="category">Second Approval</p>
-          </template>
-
-          <template slot="footer">
-            <div class="stats">
-              <md-icon>access_time</md-icon>
-              {{ new Date().toLocaleString() }}
-            </div>
-          </template>
-        </chart-card>
-      </div>
-      <div
-        class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-100"
-      >
-        <md-card>
-          <md-card-header data-background-color="orange">
-            <h4 class="title">Employees Stats</h4>
-            <p class="category">Employees in this company</p>
-          </md-card-header>
-          <md-card-content>
-            <b-loading
-          :is-full-page="false"
-          :active.sync="isLoading"
-          :can-cancel="true"
-        ></b-loading>
-        <b-table
-          :data="isEmpty ? [] : users"
-          :striped="true"
-          :hoverable="true"
-          :paginated="true"
-          :per-page="10"
-          aria-next-label="Next page"
-          aria-previous-label="Previous page"
-          aria-page-label="Page"
-          aria-current-label="Current page"
-          :pagination-simple="false"
-        >
-          <template slot-scope="props">
-            <b-table-column field="id" label="Username" width="300" sortable="">
-              <a @click="detail(props.row)">
-                {{ props.row.username }}
-              </a>
-            </b-table-column>
-            <b-table-column field="id" label="Firstname" width="300" sortable="">
-              {{ props.row.firstname }}
-            </b-table-column>
-            <b-table-column field="id" label="Lastname" width="300" sortable="">
-              {{ props.row.lastname }}
-            </b-table-column>
-            <b-table-column field="id" label="Designation" width="300" sortable="">
-              <span v-if="props.row.t1 == true">Level 1</span>
-              <span v-else-if="props.row.t2 == true">Level 2</span>
-              <span v-else-if="props.row.t3 == true">Level 3</span>
-              <span v-else-if="props.row.t4 == true">Level 4</span>
-              <span v-else-if="props.row.is_admin == true">Admin</span>
-              <span v-else-if="props.row.acct_t == true"
-                >Account Department</span>
-              <span v-else>Invalid User</span>
-            </b-table-column>
-          </template>
-        </b-table>
-          </md-card-content>
-        </md-card>
-      </div>
-    </div>
+          <b-tab-item :visible="true" label="Employee List">
+            <md-card-content>
+              <div class="md-layout">
+                <div
+                  class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-100"
+                >
+                  <md-card>
+                    <md-card-header data-background-color="orange">
+                      <h4 class="title">Employees Stats</h4>
+                      <p class="category">Employees in this company</p>
+                    </md-card-header>
+                    <md-card-content>
+                      <b-loading
+                        :is-full-page="false"
+                        :active.sync="isLoading"
+                        :can-cancel="true"
+                      ></b-loading>
+                      <b-table
+                        :data="isEmpty ? [] : users"
+                        :striped="true"
+                        :hoverable="true"
+                        :paginated="true"
+                        :per-page="10"
+                        aria-next-label="Next page"
+                        aria-previous-label="Previous page"
+                        aria-page-label="Page"
+                        aria-current-label="Current page"
+                        :pagination-simple="false"
+                      >
+                        <template slot-scope="props">
+                          <b-table-column
+                            field="id"
+                            label="Username"
+                            width="300"
+                            sortable=""
+                          >
+                            <a @click="detail(props.row)">
+                              {{ props.row.username }}
+                            </a>
+                          </b-table-column>
+                          <b-table-column
+                            field="id"
+                            label="Firstname"
+                            width="300"
+                            sortable=""
+                          >
+                            {{ props.row.firstname }}
+                          </b-table-column>
+                          <b-table-column
+                            field="id"
+                            label="Lastname"
+                            width="300"
+                            sortable=""
+                          >
+                            {{ props.row.lastname }}
+                          </b-table-column>
+                          <b-table-column
+                            field="id"
+                            label="Designation"
+                            width="300"
+                            sortable=""
+                          >
+                            <span v-if="props.row.t1 == true">Level 1</span>
+                            <span v-else-if="props.row.t2 == true"
+                              >Level 2</span
+                            >
+                            <span v-else-if="props.row.t3 == true"
+                              >Level 3</span
+                            >
+                            <span v-else-if="props.row.t4 == true"
+                              >Level 4</span
+                            >
+                            <span v-else-if="props.row.is_admin == true"
+                              >Admin</span
+                            >
+                            <span v-else-if="props.row.acct_t == true"
+                              >Account Department</span
+                            >
+                            <span v-else>Invalid User</span>
+                          </b-table-column>
+                        </template>
+                      </b-table>
+                    </md-card-content>
+                  </md-card>
+                </div>
+              </div>
+            </md-card-content>
+          </b-tab-item>
+        </b-tabs>
+      </md-card-content>
+    </md-card>
   </div>
 </template>
 
 <script>
 import performance from "@/js/performance.js";
 import { required } from "vuelidate/lib/validators";
-import {
-  StatsCard,
-  ChartCard
-} from "@/components";
+import { StatsCard, ChartCard } from "@/components";
 
 export default {
   components: {
     StatsCard,
-    ChartCard
+    ChartCard,
   },
   data() {
     return {
@@ -917,13 +973,11 @@ export default {
       await this.getPSRPendingOneseries(data);
       await this.getPSRPendingTwoseries(data);
     },
-    async getUser(){
-
-    },
+    async getUser() {},
     detail(value) {
       console.log(value.id);
       this.$router.push({
-        path: `/UserPerformance/${this.id}/${value.id}`
+        path: `/UserPerformance/${this.id}/${value.id}`,
       });
     },
     openLoading() {
@@ -937,9 +991,8 @@ export default {
       if (this.page >= this.total_page - 1) {
         this.page = this.total_page;
       } else this.page += 1;
-      if (this.page == this.total_page) 
-        this.isNext = true;
-      
+      if (this.page == this.total_page) this.isNext = true;
+
       this.poObj.in_page = this.page;
       this.getUser();
     },
@@ -950,7 +1003,7 @@ export default {
         this.isPrevious = true;
       } else this.page -= 1;
       if (this.page == 1) this.isPrevious = true;
-            
+
       this.poObj.in_page = this.page;
       this.getUser();
     },
@@ -962,10 +1015,10 @@ export default {
         this.page = 1;
         this.isPrevious = false;
       } else this.page = 1;
-            
+
       this.poObj.in_page = this.page;
       this.getUser();
-    }
+    },
   },
 };
 </script>
