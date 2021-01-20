@@ -16,29 +16,39 @@
           {{ userName }} {{ userTier }}
         </h1>
 
-        <table cls="clsForm" width="80%:">
-          <col width="15%" />
-          <col width="70%" />
+        <div class="md-layout-item md-medium-size-90 md-xsmall-size-90 md-size-90">
+        <table cls="clsForm">
           <tr>
-            <td class="clsLabel">Year:</td>
+            <td class="clsLabel">
+              Year:
+            </td>
             <td class="clsValue">
-              <b-input v-model="year" style="width: 98%"></b-input>
+              <b-tooltip label="Previous" type="is-light" position="is-bottom">
+                <b-button @click="year--" size="is-small" float="right" type="is-light">
+                  <md-icon>navigate_before</md-icon>
+                </b-button>
+              </b-tooltip>
+            </td>
+            <td class="clsValue">
+                <b-input v-model="year" style="width: 98%"></b-input>
               <div class="error" v-if="!$v.year.required && isPosted">
                 Year is required
               </div>
             </td>
-            <td>
-              <md-button
-                class="md-raised md-success"
-                @click="filter_year()"
-                style="margin: auto; display: block"
-                >Filter</md-button
-              >
+            <td class="clsValue">
+              <b-tooltip label="Next" type="is-light" position="is-bottom">
+                <b-button @click="year == new Date().getFullYear() ? year : year++" size="is-small"
+                  float="right" type="is-light">
+                  <md-icon>navigate_next</md-icon>
+                </b-button>
+                &nbsp;&nbsp;
+              </b-tooltip>
             </td>
           </tr>
         </table>
       </div>
-
+      </div>
+      <b-loading :is-full-page="false" :active.sync="isLoadingPage" :can-cancel="true"></b-loading>
       <div
         class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-25"
       >
@@ -384,8 +394,9 @@ export default {
     return {
       isEmpty: false,
       isLoading: false,
+      isLoadingPage: false,
       id: localStorage.id,
-      year: 2021,
+      year: new Date().getFullYear(),
       usersData: [],
       userName: "",
       userTier: "",
@@ -627,6 +638,7 @@ export default {
   async created() {
     try {
       this.isLoading = true;
+      this.isLoadingPage = true;
       this.user_id = this.$route.params.user_id;
       this.dashboardURL = "/performance/" + this.id;
       const data = await performance.get_all_user_performance(this.year);
@@ -634,8 +646,10 @@ export default {
       await this.get_performance_data(this.usersData);
       this.getAllData(this.performanceData);
       this.isLoading = false;
+      this.isLoadingPage = false;
     } catch (err) {
       this.isLoading = false;
+      this.isLoadingPage = false;
       this.error = err.message;
     }
   },
@@ -681,19 +695,22 @@ export default {
         }
       }
     },
-    async filter_year() {
+    async yearChange() {
       this.isPosted = true;
       if (!this.$v.$invalid) {
         try {
           this.performanceData = [];
           this.isLoading = true;
+          this.isLoadingPage = true;
           const data = await performance.get_all_user_performance(this.year);
           this.usersData = data.user_data;
           await this.get_performance_data(this.usersData);
           this.getAllData(this.performanceData);
           this.isLoading = false;
+          this.isLoadingPage = false;
         } catch (err) {
           this.isLoading = false;
+          this.isLoadingPage = false;
           alert(err);
           this.error = err.message;
         }
@@ -896,5 +913,10 @@ export default {
       await this.getPSRPendingTwoseries(data);
     },
   },
+  watch: {
+      year(val) {
+        this.yearChange();
+      }
+    }
 };
 </script>
