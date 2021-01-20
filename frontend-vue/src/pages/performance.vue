@@ -29,7 +29,7 @@
       <div
         class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-25"
       >
-        <stats-card data-background-color="green">
+        <stats-card data-background-color="orange">
           <template slot="header">
             <md-icon>article</md-icon>
           </template>
@@ -52,7 +52,7 @@
       >
         <stats-card data-background-color="orange">
           <template slot="header">
-            <md-icon>content_copy</md-icon>
+            <md-icon>work</md-icon>
           </template>
 
           <template slot="content">
@@ -94,9 +94,9 @@
       <div
         class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-25"
       >
-        <stats-card data-background-color="red">
+        <stats-card data-background-color="purple">
           <template slot="header">
-            <md-icon>content_copy</md-icon>
+            <md-icon>work</md-icon>
           </template>
 
           <template slot="content">
@@ -121,7 +121,7 @@
           :chart-responsive-options="POapprovalChart.responsiveOptions"
           :chart-type="'Bar'"
           :key="componentKey"
-          data-background-color="red"
+          data-background-color="orange"
         >
           <template slot="content">
             <h4 class="title">PO Approval Per Month</h4>
@@ -144,7 +144,7 @@
           :chart-options="POdataDeclineChart.options"
           :chart-type="'Bar'"
           :key="componentKey"
-          data-background-color="green"
+          data-background-color="red"
         >
           <template slot="content">
             <h4 class="title">PO Decline Per Month</h4>
@@ -215,7 +215,7 @@
           :chart-responsive-options="PSRapprovalChart.responsiveOptions"
           :chart-type="'Bar'"
           :key="componentKey"
-          data-background-color="red"
+          data-background-color="purple"
         >
           <template slot="content">
             <h4 class="title">PSR Approval Per Month</h4>
@@ -238,7 +238,7 @@
           :chart-options="PSRdataDeclineChart.options"
           :chart-type="'Bar'"
           :key="componentKey"
-          data-background-color="green"
+          data-background-color="red"
         >
           <template slot="content">
             <h4 class="title">PSR Decline Per Month</h4>
