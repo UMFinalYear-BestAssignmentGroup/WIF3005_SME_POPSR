@@ -170,12 +170,12 @@
                 style="background-color:#ffffff; color: black; overflow:yes;"
               >
                 <md-card-content class="md-scrollbar">
-                  <md-button
+                  <!-- <md-button
                     class="md-raised md-danger"
                     @click="remove()"
                     style="float:right"
                     >Remove</md-button
-                  >
+                  > -->
                   <md-button
                     class="md-raised md-success"
                     @click="clone()"
@@ -187,12 +187,13 @@
                 <table>
                   <tr>
                     <th style="width:3%">No.</th>
-                    <th style="width:40%">Item Description</th>
+                    <th style="width:35%">Item Description</th>
                     <th style="width:20%">Unit Price(RM)</th>
                     <th style="width:15%">Quantity</th>
                     <th style="width:10%">Total(RM)</th>
+                    <th style="width:5%">Remove</th>
                   </tr>
-                  <tr v-for="items in desc" :key="items">
+                  <tr v-for="(items, index) in desc" :key="index">
                     <td>{{ items.index }}.</td>
                     <td>
                       <b-field>
@@ -228,11 +229,11 @@
                       >
                       {{ (items.unitPrice * items.quantity) | numeral("0.00") }}
                     </td>
-                    <!-- <td>
-                        <div @click="remove()">
+                    <td>
+                        <div @click="remove(index)">
                           <md-icon>cancel</md-icon>
                         </div>
-                      </td> -->
+                      </td>
                   </tr>
                   <br>
                 </table>
@@ -440,13 +441,19 @@ export default {
       });
       this.index++;
     },
-    remove() {
-      this.desc.pop({
-        description: this.index,
-        quantity: 0,
-        unitPrice: 0
-      });
-      this.index--;
+    remove(index) {
+      // this.desc.pop({
+      //   description: this.index,
+      //   quantity: 0,
+      //   unitPrice: 0
+      // });
+      if(index > 0) {
+        for (let i = index + 1; i < this.desc.length; i++) {
+          this.desc[i].index -= 1;
+        }
+        this.desc.splice(index, 1);
+        this.index--;
+      }
     },
     poCreated() {
       this.$buefy.snackbar.open({
