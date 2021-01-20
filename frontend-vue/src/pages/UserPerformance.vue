@@ -16,39 +16,56 @@
           {{ userName }} {{ userTier }}
         </h1>
 
-        <div class="md-layout-item md-medium-size-90 md-xsmall-size-90 md-size-90">
-        <table cls="clsForm">
-          <tr>
-            <td class="clsLabel">
-              Year:
-            </td>
-            <td class="clsValue">
-              <b-tooltip label="Previous" type="is-light" position="is-bottom">
-                <b-button @click="year--" size="is-small" float="right" type="is-light">
-                  <md-icon>navigate_before</md-icon>
-                </b-button>
-              </b-tooltip>
-            </td>
-            <td class="clsValue">
+        <div
+          class="md-layout-item md-medium-size-90 md-xsmall-size-90 md-size-90"
+        >
+          <table cls="clsForm">
+            <tr>
+              <td class="clsLabel">Year:</td>
+              <td class="clsValue">
+                <b-tooltip
+                  label="Previous"
+                  type="is-light"
+                  position="is-bottom"
+                >
+                  <b-button
+                    @click="year--"
+                    size="is-small"
+                    float="right"
+                    type="is-light"
+                  >
+                    <md-icon>navigate_before</md-icon>
+                  </b-button>
+                </b-tooltip>
+              </td>
+              <td class="clsValue">
                 <b-input v-model="year" style="width: 98%"></b-input>
-              <div class="error" v-if="!$v.year.required && isPosted">
-                Year is required
-              </div>
-            </td>
-            <td class="clsValue">
-              <b-tooltip label="Next" type="is-light" position="is-bottom">
-                <b-button @click="year == new Date().getFullYear() ? year : year++" size="is-small"
-                  float="right" type="is-light">
-                  <md-icon>navigate_next</md-icon>
-                </b-button>
-                &nbsp;&nbsp;
-              </b-tooltip>
-            </td>
-          </tr>
-        </table>
+                <div class="error" v-if="!$v.year.required && isPosted">
+                  Year is required
+                </div>
+              </td>
+              <td class="clsValue">
+                <b-tooltip label="Next" type="is-light" position="is-bottom">
+                  <b-button
+                    @click="year == new Date().getFullYear() ? year : year++"
+                    size="is-small"
+                    float="right"
+                    type="is-light"
+                  >
+                    <md-icon>navigate_next</md-icon>
+                  </b-button>
+                  &nbsp;&nbsp;
+                </b-tooltip>
+              </td>
+            </tr>
+          </table>
+        </div>
       </div>
-      </div>
-      <b-loading :is-full-page="false" :active.sync="isLoadingPage" :can-cancel="true"></b-loading>
+      <b-loading
+        :is-full-page="false"
+        :active.sync="isLoadingPage"
+        :can-cancel="true"
+      ></b-loading>
       <div
         class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-25"
       >
@@ -659,12 +676,6 @@ export default {
     },
   },
   methods: {
-    // detail(value) {
-    //   console.log(value.id);
-    //   this.$router.push({
-    //     path: `/UserPerformance/${this.id}`,
-    //   });
-    // },
     async get_performance_data(data) {
       for (let user in data) {
         if (this.user_id == data[user].id) {
@@ -726,10 +737,10 @@ export default {
       }
     },
     async getTotalSubmittedPO(data) {
-      this.totalSubmittedPO = data[0].po_total_submitted == null
-            ? 0
-            : parseInt(data[0].po_total_submitted);
-      
+      this.totalSubmittedPO =
+        data[0].po_total_submitted == null
+          ? 0
+          : parseInt(data[0].po_total_submitted);
     },
 
     async getPOEfficiency(data) {
@@ -767,10 +778,10 @@ export default {
       }
     },
     async getTotalSubmittedPSR(data) {
-      this.totalSubmittedPSR = data[0].psr_total_submitted == null
-            ? 0
-            : parseInt(data[0].psr_total_submitted);
-      
+      this.totalSubmittedPSR =
+        data[0].psr_total_submitted == null
+          ? 0
+          : parseInt(data[0].psr_total_submitted);
     },
     async getPSREfficiency(data) {
       let totalEfficiency = 0;
@@ -908,9 +919,9 @@ export default {
     },
   },
   watch: {
-      year() {
-        this.yearChange();
-      }
-    }
+    year() {
+      this.yearChange();
+    },
+  },
 };
 </script>

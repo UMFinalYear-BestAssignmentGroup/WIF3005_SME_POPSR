@@ -745,6 +745,8 @@ export default {
           this.isLoadingPage = true;
           this.performanceData = await performance.get_performance(this.year);
           this.getAllData(this.performanceData);
+          const user = await performance.get_all_user_performance(this.year);
+          this.users = user.users;
           this.isLoading = false;
           this.isLoadingPage = false;
         } catch (err) {

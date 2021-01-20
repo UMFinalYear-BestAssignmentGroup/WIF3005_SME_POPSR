@@ -8,43 +8,56 @@
           {{ userName }} {{ userTier }}
         </h1>
 
-        <table cls="clsForm">
-          <tr>
-            <td class="clsLabel">Year:</td>
-            <td class="clsValue">
-              <b-tooltip label="Previous" type="is-light" position="is-bottom">
-                <b-button
-                  @click="year--"
-                  size="is-small"
-                  float="right"
+        <div
+          class="md-layout-item md-medium-size-90 md-xsmall-size-90 md-size-90"
+        >
+          <table cls="clsForm">
+            <tr>
+              <td class="clsLabel">Year:</td>
+              <td class="clsValue">
+                <b-tooltip
+                  label="Previous"
                   type="is-light"
+                  position="is-bottom"
                 >
-                  <md-icon>navigate_before</md-icon>
-                </b-button>
-              </b-tooltip>
-            </td>
-            <td class="clsValue">
-              <b-input v-model="year" style="width: 98%"></b-input>
-              <div class="error" v-if="!$v.year.required && isPosted">
-                Year is required
-              </div>
-            </td>
-            <td class="clsValue">
-              <b-tooltip label="Next" type="is-light" position="is-bottom">
-                <b-button
-                  @click="year == new Date().getFullYear() ? year : year++"
-                  size="is-small"
-                  float="right"
-                  type="is-light"
-                >
-                  <md-icon>navigate_next</md-icon>
-                </b-button>
-                &nbsp;&nbsp;
-              </b-tooltip>
-            </td>
-          </tr>
-        </table>
+                  <b-button
+                    @click="year--"
+                    size="is-small"
+                    float="right"
+                    type="is-light"
+                  >
+                    <md-icon>navigate_before</md-icon>
+                  </b-button>
+                </b-tooltip>
+              </td>
+              <td class="clsValue">
+                <b-input v-model="year" style="width: 98%"></b-input>
+                <div class="error" v-if="!$v.year.required && isPosted">
+                  Year is required
+                </div>
+              </td>
+              <td class="clsValue">
+                <b-tooltip label="Next" type="is-light" position="is-bottom">
+                  <b-button
+                    @click="year == new Date().getFullYear() ? year : year++"
+                    size="is-small"
+                    float="right"
+                    type="is-light"
+                  >
+                    <md-icon>navigate_next</md-icon>
+                  </b-button>
+                  &nbsp;&nbsp;
+                </b-tooltip>
+              </td>
+            </tr>
+          </table>
+        </div>
       </div>
+      <b-loading
+        :is-full-page="false"
+        :active.sync="isLoadingPage"
+        :can-cancel="true"
+      ></b-loading>
 
       <div
         class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-25"
@@ -383,7 +396,7 @@ import { required } from "vuelidate/lib/validators";
 import { StatsCard, ChartCard } from "@/components";
 
 export default {
-  name:"personal-performance",
+  name: "personal-performance",
   components: {
     StatsCard,
     ChartCard,
@@ -392,8 +405,9 @@ export default {
     return {
       isEmpty: false,
       isLoading: false,
+      isLoadingPage: false,
       id: localStorage.id,
-      year: 2021,
+      year: new Date().getFullYear(),
       usersData: [],
       userName: "",
       userTier: "",
@@ -635,14 +649,17 @@ export default {
   async created() {
     try {
       this.isLoading = true;
+      this.isLoadingPage = true;
       this.user_id = this.id;
       const data = await performance.get_all_user_performance(this.year);
       this.usersData = data.user_data;
       await this.get_performance_data(this.usersData);
       this.getAllData(this.performanceData);
       this.isLoading = false;
+      this.isLoadingPage = false;
     } catch (err) {
       this.isLoading = false;
+      this.isLoadingPage = false;
       this.error = err.message;
     }
   },
@@ -652,12 +669,6 @@ export default {
     },
   },
   methods: {
-    // detail(value) {
-    //   console.log(value.id);
-    //   this.$router.push({
-    //     path: `/UserPerformance/${this.id}`,
-    //   });
-    // },
     async get_performance_data(data) {
       for (let user in data) {
         if (this.user_id == data[user].id) {
@@ -688,19 +699,22 @@ export default {
         }
       }
     },
-    async filter_year() {
+    async yearChange() {
       this.isPosted = true;
       if (!this.$v.$invalid) {
         try {
           this.performanceData = [];
           this.isLoading = true;
+          this.isLoadingPage = true;
           const data = await performance.get_all_user_performance(this.year);
           this.usersData = data.user_data;
           await this.get_performance_data(this.usersData);
           this.getAllData(this.performanceData);
           this.isLoading = false;
+          this.isLoadingPage = false;
         } catch (err) {
           this.isLoading = false;
+          this.isLoadingPage = false;
           alert(err);
           this.error = err.message;
         }
@@ -739,41 +753,6 @@ export default {
       }
       this.POefficiency = (totalEfficiency / monthCount).toFixed(2);
     },
-    // async getTotalSubmittedPO(data) {
-    //   this.totalSubmittedPO = 0;
-    //   for (let dataMonth in data) {
-    //     this.totalSubmittedPO +=
-    //       data[dataMonth].po_total_submitted == null
-    //         ? 0
-    //         : parseInt(data[dataMonth].po_total_submitted);
-    //   }
-    // },
-
-    // async getPOEfficiency(data) {
-    //   let totalEfficiency = 0;
-    //   this.POefficiency = 0;
-    //   let monthCount = 0;
-    //   for (let dataMonth in data) {
-    //     totalEfficiency +=
-    //       data[dataMonth].po_efficiency == null
-    //         ? 0
-    //         : parseInt(data[dataMonth].po_efficiency);
-    //     if (data[dataMonth].po_efficiency != null) {
-    //       monthCount += 1;
-    //     }
-    //   }
-    //   this.POefficiency = (totalEfficiency / monthCount).toFixed(2);
-    // },
-
-    // async getTotalDeclinePO(data) {
-    //   this.totalDeclinePO = 0;
-    //   for (let dataMonth in data) {
-    //     this.totalDeclinePO +=
-    //       data[dataMonth].total_po_decline == null
-    //         ? 0
-    //         : parseInt(data[dataMonth].total_po_decline);
-    //   }
-    // },
     async getPSRData(data) {
       this.totalPSR = 0;
       this.totalSubmittedPSR = 0;
@@ -806,40 +785,6 @@ export default {
       }
       this.PSRefficiency = (totalEfficiency / monthCount).toFixed(2);
     },
-    // async getTotalSubmittedPSR(data) {
-    //   this.totalSubmittedPSR = 0;
-    //   for (let dataMonth in data) {
-    //     this.totalSubmittedPSR +=
-    //       data[dataMonth].psr_total_submitted == null
-    //         ? 0
-    //         : parseInt(data[dataMonth].psr_total_submitted);
-    //   }
-    // },
-    // async getPSREfficiency(data) {
-    //   let totalEfficiency = 0;
-    //   this.PSRefficiency = 0;
-    //   let monthCount = 0;
-    //   for (let dataMonth in data) {
-    //     totalEfficiency +=
-    //       data[dataMonth].psr_efficiency == null
-    //         ? 0
-    //         : parseInt(data[dataMonth].psr_efficiency);
-    //     if (data[dataMonth].psr_efficiency != null) {
-    //       monthCount += 1;
-    //     }
-    //   }
-    //   this.PSRefficiency = (totalEfficiency / monthCount).toFixed(2);
-    // },
-
-    // async getTotalDeclinePSR(data) {
-    //   this.totalDeclinePSR = 0;
-    //   for (let dataMonth in data) {
-    //     this.totalDeclinePSR +=
-    //       data[dataMonth].total_psr_decline == null
-    //         ? 0
-    //         : parseInt(data[dataMonth].total_psr_decline);
-    //   }
-    // },
 
     async getPOPendingOneseries(data) {
       this.POpendingOneChart.data.series.pop();
@@ -932,14 +877,8 @@ export default {
     },
     async getAllData(data) {
       await this.getPOData(data);
-      // await this.getTotalSubmittedPO(data);
-      // await this.getPOEfficiency(data);
-      // await this.getTotalDeclinePO(data);
 
       await this.getPSRData(data);
-      // await this.getTotalSubmittedPSR(data);
-      // await this.getPSREfficiency(data);
-      // await this.getTotalDeclinePSR(data);
 
       await this.getPOApprovalseries(data);
       await this.getPOPendingOneseries(data);
