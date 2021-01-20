@@ -592,7 +592,7 @@ export default {
           this.performanceData = [];
           this.isLoading = true;
           const data = await performance.get_all_user_performance(this.year);
-          this.usersData = data;
+          this.usersData = data.user_data;
           await this.get_performance_data(this.usersData);
           this.getAllData(this.performanceData);
           this.isLoading = false;
