@@ -4,7 +4,6 @@
       <div
         class="md-layout-item md-medium-size-90 md-xsmall-size-90 md-size-90"
       >
-
         <h1 style="margin-left: 10px; font-size: 35px">
           {{ userName }} {{ userTier }}
         </h1>
@@ -42,7 +41,7 @@
 
           <template slot="content">
             <p class="category">Total Submitted PO</p>
-            <h3 class="title">{{totalSubmittedPO }}</h3>
+            <h3 class="title">{{ totalSubmittedPO }}</h3>
           </template>
 
           <template slot="footer">
@@ -85,7 +84,7 @@
 
           <template slot="content">
             <p class="category">Total Declined PO</p>
-            <h3 class="title">{{totalDeclinePO}}</h3>
+            <h3 class="title">{{ totalDeclinePO }}</h3>
           </template>
 
           <template slot="footer">
@@ -173,7 +172,7 @@
 
           <template slot="content">
             <p class="category">Total Decline PSR</p>
-            <h3 class="title">{{totalDeclinePSR }}</h3>
+            <h3 class="title">{{ totalDeclinePSR }}</h3>
           </template>
 
           <template slot="footer">
@@ -219,7 +218,7 @@
           >
             <template slot="content">
               <h4 class="title">Time Taken for PO Approval Per Month (Min)</h4>
-              <p class="category">Final Approval </p>
+              <p class="category">Final Approval</p>
             </template>
 
             <template slot="footer">
@@ -691,30 +690,25 @@ export default {
         }
       } else alert("Fill the required fields");
     },
-    async getTotalPO(data) {
+    async getPOData(data) {
       this.totalPO = 0;
+      this.totalSubmittedPO = 0;
+      let totalEfficiency = 0;
+      this.POefficiency = 0;
+      let monthCount = 0;
+      this.totalDeclinePO = 0;
+
       for (let dataMonth in data) {
         this.totalPO +=
           data[dataMonth].total_po == null
             ? 0
             : parseInt(data[dataMonth].total_po);
-      }
-    },
-    async getTotalSubmittedPO(data) {
-      this.totalSubmittedPO = 0;
-      for (let dataMonth in data) {
+
         this.totalSubmittedPO +=
           data[dataMonth].po_total_submitted == null
             ? 0
             : parseInt(data[dataMonth].po_total_submitted);
-      }
-    },
 
-    async getPOEfficiency(data) {
-      let totalEfficiency = 0;
-      this.POefficiency = 0;
-      let monthCount = 0;
-      for (let dataMonth in data) {
         totalEfficiency +=
           data[dataMonth].po_efficiency == null
             ? 0
@@ -722,42 +716,66 @@ export default {
         if (data[dataMonth].po_efficiency != null) {
           monthCount += 1;
         }
-      }
-      this.POefficiency = (totalEfficiency / monthCount).toFixed(2);
-    },
-
-    async getTotalDeclinePO(data) {
-      this.totalDeclinePO = 0;
-      for (let dataMonth in data) {
         this.totalDeclinePO +=
           data[dataMonth].total_po_decline == null
             ? 0
             : parseInt(data[dataMonth].total_po_decline);
       }
+      this.POefficiency = (totalEfficiency / monthCount).toFixed(2);
     },
-    async getTotalPSR(data) {
+    // async getTotalSubmittedPO(data) {
+    //   this.totalSubmittedPO = 0;
+    //   for (let dataMonth in data) {
+    //     this.totalSubmittedPO +=
+    //       data[dataMonth].po_total_submitted == null
+    //         ? 0
+    //         : parseInt(data[dataMonth].po_total_submitted);
+    //   }
+    // },
+
+    // async getPOEfficiency(data) {
+    //   let totalEfficiency = 0;
+    //   this.POefficiency = 0;
+    //   let monthCount = 0;
+    //   for (let dataMonth in data) {
+    //     totalEfficiency +=
+    //       data[dataMonth].po_efficiency == null
+    //         ? 0
+    //         : parseInt(data[dataMonth].po_efficiency);
+    //     if (data[dataMonth].po_efficiency != null) {
+    //       monthCount += 1;
+    //     }
+    //   }
+    //   this.POefficiency = (totalEfficiency / monthCount).toFixed(2);
+    // },
+
+    // async getTotalDeclinePO(data) {
+    //   this.totalDeclinePO = 0;
+    //   for (let dataMonth in data) {
+    //     this.totalDeclinePO +=
+    //       data[dataMonth].total_po_decline == null
+    //         ? 0
+    //         : parseInt(data[dataMonth].total_po_decline);
+    //   }
+    // },
+    async getPSRData(data) {
       this.totalPSR = 0;
+      this.totalSubmittedPSR = 0;
+      let totalEfficiency = 0;
+      this.PSRefficiency = 0;
+      let monthCount = 0;
+      this.totalDeclinePSR = 0;
       for (let dataMonth in data) {
         this.totalPSR +=
           data[dataMonth].total_psr == null
             ? 0
             : parseInt(data[dataMonth].total_psr);
-      }
-    },
-    async getTotalSubmittedPSR(data) {
-      this.totalSubmittedPSR = 0;
-      for (let dataMonth in data) {
+
         this.totalSubmittedPSR +=
           data[dataMonth].psr_total_submitted == null
             ? 0
             : parseInt(data[dataMonth].psr_total_submitted);
-      }
-    },
-    async getPSREfficiency(data) {
-      let totalEfficiency = 0;
-      this.PSRefficiency = 0;
-      let monthCount = 0;
-      for (let dataMonth in data) {
+
         totalEfficiency +=
           data[dataMonth].psr_efficiency == null
             ? 0
@@ -765,19 +783,47 @@ export default {
         if (data[dataMonth].psr_efficiency != null) {
           monthCount += 1;
         }
-      }
-      this.PSRefficiency = (totalEfficiency / monthCount).toFixed(2);
-    },
-
-    async getTotalDeclinePSR(data) {
-      this.totalDeclinePSR = 0;
-      for (let dataMonth in data) {
         this.totalDeclinePSR +=
           data[dataMonth].total_psr_decline == null
             ? 0
             : parseInt(data[dataMonth].total_psr_decline);
       }
+      this.PSRefficiency = (totalEfficiency / monthCount).toFixed(2);
     },
+    // async getTotalSubmittedPSR(data) {
+    //   this.totalSubmittedPSR = 0;
+    //   for (let dataMonth in data) {
+    //     this.totalSubmittedPSR +=
+    //       data[dataMonth].psr_total_submitted == null
+    //         ? 0
+    //         : parseInt(data[dataMonth].psr_total_submitted);
+    //   }
+    // },
+    // async getPSREfficiency(data) {
+    //   let totalEfficiency = 0;
+    //   this.PSRefficiency = 0;
+    //   let monthCount = 0;
+    //   for (let dataMonth in data) {
+    //     totalEfficiency +=
+    //       data[dataMonth].psr_efficiency == null
+    //         ? 0
+    //         : parseInt(data[dataMonth].psr_efficiency);
+    //     if (data[dataMonth].psr_efficiency != null) {
+    //       monthCount += 1;
+    //     }
+    //   }
+    //   this.PSRefficiency = (totalEfficiency / monthCount).toFixed(2);
+    // },
+
+    // async getTotalDeclinePSR(data) {
+    //   this.totalDeclinePSR = 0;
+    //   for (let dataMonth in data) {
+    //     this.totalDeclinePSR +=
+    //       data[dataMonth].total_psr_decline == null
+    //         ? 0
+    //         : parseInt(data[dataMonth].total_psr_decline);
+    //   }
+    // },
 
     async getPOPendingOneseries(data) {
       this.POpendingOneChart.data.series.pop();
@@ -869,15 +915,15 @@ export default {
       this.componentKey += 1;
     },
     async getAllData(data) {
-      await this.getTotalPO(data);
-      await this.getTotalSubmittedPO(data);
-      await this.getPOEfficiency(data);
-      await this.getTotalDeclinePO(data);
+      await this.getPOData(data);
+      // await this.getTotalSubmittedPO(data);
+      // await this.getPOEfficiency(data);
+      // await this.getTotalDeclinePO(data);
 
-      await this.getTotalPSR(data);
-      await this.getTotalSubmittedPSR(data);
-      await this.getPSREfficiency(data);
-      await this.getTotalDeclinePSR(data);
+      await this.getPSRData(data);
+      // await this.getTotalSubmittedPSR(data);
+      // await this.getPSREfficiency(data);
+      // await this.getTotalDeclinePSR(data);
 
       await this.getPOApprovalseries(data);
       await this.getPOPendingOneseries(data);
