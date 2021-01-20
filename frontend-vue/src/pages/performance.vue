@@ -35,8 +35,8 @@
           </template>
 
           <template slot="content">
-            <p class="category">Total Approve PO/Total PO</p>
-            <h3 class="title">{{ totalPO - totalDeclinePO }}/{{ totalPO }}</h3>
+            <p class="category">Total Approved PO</p>
+            <h3 class="title">{{ totalPO - totalDeclinePO }}</h3>
           </template>
 
           <template slot="footer">
@@ -77,9 +77,9 @@
           </template>
 
           <template slot="content">
-            <p class="category">Total Approve PSR/Total PSR</p>
+            <p class="category">Total Approved PSR</p>
             <h3 class="title">
-              {{ totalPSR - totalDeclinePSR }}/{{ totalPSR }}
+              {{ totalPSR - totalDeclinePSR }}
             </h3>
           </template>
 
