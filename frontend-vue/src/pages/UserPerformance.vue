@@ -640,7 +640,7 @@ export default {
       this.isLoading = true;
       this.isLoadingPage = true;
       this.user_id = this.$route.params.user_id;
-      this.dashboardURL = "/performance/" + this.id;
+      this.dashboardURL = "/overallPerformance/" + this.id;
       const data = await performance.get_all_user_performance(this.year);
       this.usersData = data.user_data;
       await this.get_performance_data(this.usersData);
