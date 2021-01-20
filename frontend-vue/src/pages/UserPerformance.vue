@@ -4,7 +4,7 @@
       <div
         class="md-layout-item md-medium-size-90 md-xsmall-size-90 md-size-90"
       >
-      <router-link style="margin-left: 10px;font-size: 18px; font-weight:400" to="/Performance/id: this.id">Dashboard</router-link>
+      <router-link style="margin-left: 10px;font-size: 18px; font-weight:400" :to=dashboardURL>Dashboard</router-link>
       <span style="font-size: 18px; font-weight:400"> / {{ userName }} {{ userTier }}</span>
         <h1 style="margin-left: 10px; font-size:35px">{{ userName }} {{ userTier }}</h1>
 
@@ -532,7 +532,8 @@ export default {
   async created() {
     try {
       this.isLoading = true;
-      this.id = this.$route.params.user_id;
+      this.user_id = this.$route.params.user_id;
+      this.dashboardURL = "/performance/" + this.id;
       const data = await performance.get_all_user_performance(this.year);
       this.usersData = data.user_data;
       await this.get_performance_data(this.usersData);
@@ -549,15 +550,15 @@ export default {
     },
   },
   methods: {
-    detail(value) {
-      console.log(value.id);
-      this.$router.push({
-        path: `/UserPerformance/${this.id}`,
-      });
-    },
+    // detail(value) {
+    //   console.log(value.id);
+    //   this.$router.push({
+    //     path: `/UserPerformance/${this.id}`,
+    //   });
+    // },
     async get_performance_data(data) {
       for (let user in data) {
-        if (this.id == data[user].id) {
+        if (this.user_id == data[user].id) {
           this.performanceData = data[user].performance;
           this.userName = data[user].lastname + " " + data[user].firstname;
           if (data[user].t1 == true) {
