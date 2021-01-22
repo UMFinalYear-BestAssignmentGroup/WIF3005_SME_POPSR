@@ -211,7 +211,6 @@ export default {
         t4: false,
         is_admin: false,
         isPosted : false,
-        dataBackgroundColor : 'blue',
         validateDepartment: true,
         isLoading: false
     };
