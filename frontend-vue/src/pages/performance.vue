@@ -182,12 +182,11 @@
       <div
         class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-50"
       >
-        <chart-card
-          :chart-data="POpendingOneChart.data"
-          :chart-options="POpendingOneChart.options"
-          :chart-type="'Line'"
+        <chart
+          :chartData="POpendingOneChart.data"
+          :chartOptions="POpendingOneChart.options"
+          :chartType="'line'"
           :key="componentKey"
-          data-background-color="green"
         >
           <template slot="content">
             <h4 class="title">Time Taken for PO Pending 1 (Min)</h4>
@@ -200,7 +199,7 @@
               {{ new Date().toLocaleString() }}
             </div>
           </template>
-        </chart-card>
+        </chart>
       </div>
       <div
         class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-50"
@@ -401,12 +400,14 @@
 import performance from "@/js/performance.js";
 import { required } from "vuelidate/lib/validators";
 import { StatsCard, ChartCard } from "@/components";
+import chart from "@/components/Chart/chart";
 
 export default {
   name: "overall-performance",
   components: {
     StatsCard,
     ChartCard,
+    chart,
   },
   data() {
     return {
@@ -443,20 +444,40 @@ export default {
             "Nov",
             "Dec",
           ],
-          series: [],
+          datasets: [
+            {
+              label: new Date().getFullYear(),
+              borderColor: "#ffffff",
+              data: [],
+            },
+          ],
         },
         options: {
-          lineSmooth: this.$Chartist.Interpolation.cardinal({
-            tension: 0,
-          }),
-          low: 0,
-          high: 250,
-          chartPadding: {
-            top: 0,
-            right: 0,
-            bottom: 0,
-            left: 0,
+          scales: {
+            yAxes: [
+              {
+                ticks: {
+                  beginAtZero: true,
+                },
+              },
+            ],
           },
+          tooltips: {
+            callbacks: {
+              label(tooltipItem, data) {
+                // Get the dataset label.
+                const label = data.datasets[tooltipItem.datasetIndex].label;
+
+                // Format the y-axis value.
+                const value = tooltipItem.yLabel;
+
+                return `${label}: ${value}`;
+              },
+            },
+          },
+          legend: {
+            display: false,
+          }
         },
       },
       POpendingTwoChart: {
@@ -829,7 +850,6 @@ export default {
     },
 
     async getPOPendingOneseries(data) {
-      this.POpendingOneChart.data.series.pop();
       let series = Array();
       for (let dataMonth in data.overall) {
         series.push(
@@ -838,8 +858,8 @@ export default {
             : parseInt(data.overall[dataMonth].tmp_average_po.pending_1.minutes)
         );
       }
-      this.POpendingOneChart.options.high = Math.max.apply(Math, series) + 50;
-      this.POpendingOneChart.data.series.push(series);
+      this.POpendingOneChart.data.datasets.data = series;
+      console.log(this.POpendingOneChart.data.datasets.data);
       this.forceRender();
     },
     async getPOPendingTwoseries(data) {
